@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { emptyCart, removeFromCart, updateQuantity } from "utils/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { formatPrice } from "pages/api/storefront";

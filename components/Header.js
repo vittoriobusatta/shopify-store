@@ -1,7 +1,10 @@
 import Link from "next/link";
 import React from "react";
+import { useSelector } from "react-redux";
 
 function Header() {
+  const cart = useSelector((state) => state.cart);
+
   return (
     <header>
       <Link href="/">
@@ -17,20 +20,29 @@ function Header() {
           />
         </svg>
       </Link>
-      <svg
-        width="30"
-        height="10"
-        viewBox="0 0 20 8"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M1 1H19M1 7H19"
-          stroke="#064A3E"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
+      <div className="pre">
+        <svg
+          aria-hidden="true"
+          class="pre-nav-design-icon"
+          focusable="false"
+          viewBox="0 0 24 24"
+          role="img"
+          width="24px"
+          height="24px"
+          fill="none"
+        >
+          <path
+            stroke="currentColor"
+            stroke-width="1.5"
+            d="M8.25 8.25V6a2.25 2.25 0 012.25-2.25h3a2.25 2.25 0 110 4.5H3.75v8.25a3.75 3.75 0 003.75 3.75h9a3.75 3.75 0 003.75-3.75V8.25H17.5"
+          ></path>
+        </svg>
+        <span className="pre__jewel">
+          {cart.items.reduce((acc, item) => {
+            return acc + item.quantity;
+          }, 0)}
+        </span>
+      </div>
     </header>
   );
 }
