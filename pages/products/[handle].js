@@ -1,8 +1,11 @@
+import Cart from "@/components/Cart";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, gql, storefront } from "pages/api/storefront";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "utils/slice";
 
 export async function getStaticPaths() {
   const { data } = await storefront(
@@ -12,6 +15,7 @@ export async function getStaticPaths() {
           edges {
             node {
               handle
+              id
             }
           }
         }
@@ -41,6 +45,7 @@ export async function getStaticProps({ params }) {
 const singleProductQuery = (handle) => gql`
 {
 productByHandle(handle: "${handle}") {
+    id
     title
     handle
     description
@@ -61,6 +66,7 @@ productByHandle(handle: "${handle}") {
 products(first: 8) {
   edges {
     node {
+      id
       title
       handle
       productType
@@ -90,21 +96,21 @@ function Products({ singleProduct, products }) {
   const [slicedProducts, setSlicedProducts] = useState([]);
 
   useEffect(() => {
-    const relatedProducts = products.edges.filter(
-      ({ node: { handle } }) => handle !== singleProduct.handle
-    );
+    const relatedProducts = products.edges
+      .filter((product) => product.node.handle !== singleProduct.handle)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 4);
 
-    for (let i = relatedProducts.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [relatedProducts[i], relatedProducts[j]] = [
-        relatedProducts[j],
-        relatedProducts[i],
-      ];
-    }
+    setSlicedProducts(relatedProducts);
+  }, [products, singleProduct]);
 
-    const slicedProducts = relatedProducts.slice(0, 4);
-    setSlicedProducts(slicedProducts);
-  }, [products, singleProduct.handle]);
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(singleProduct));
+  };
+
+  console.log(products.edges[0].node.id);
 
   return (
     <>
@@ -120,6 +126,8 @@ function Products({ singleProduct, products }) {
         <meta property="og:image" content="/favicon.ico" />
         <meta property="og:url" content="https://www.example.com" />
       </Head>
+
+      <Cart />
 
       <section>
         <div className="products__inner">
@@ -137,6 +145,7 @@ function Products({ singleProduct, products }) {
             }}
           />
           <p>{formatPrice(price.minVariantPrice.amount)}</p>
+          <button onClick={handleAddToCart}>Add to cart</button>
         </div>
         <div className="products__related">
           <h2>Related Products</h2>

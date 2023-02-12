@@ -18,6 +18,7 @@ const productsQuery = gql`
     products(first: 8) {
       edges {
         node {
+          id
           title
           handle
           productType
@@ -41,6 +42,7 @@ const productsQuery = gql`
 `;
 
 function Home({ products }) {
+
   return (
     <>
       <Head>
