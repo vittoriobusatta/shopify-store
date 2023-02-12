@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { emptyCart, removeFromCart } from "utils/slice";
 import { useSelector, useDispatch } from "react-redux";
+import { formatPrice } from "pages/api/storefront";
 
-function Cart() {
+function Cart({ quantity, setQuantity }) {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
@@ -14,14 +15,19 @@ function Cart() {
     dispatch(removeFromCart({ id }));
   };
 
+  const handleInputChange = (e) => {
+    const newQuantity = e.target.value;
+    setQuantity(newQuantity);
+  };
+
   return (
     <section className="cart">
       {cart.items.map((item) => {
         return (
-          <div key={item.id}>
+          <div className="cart__row" key={item.id}>
             <div>
               <h1>{item.title}</h1>
-              <p>{item.priceRange.minVariantPrice.amount}</p>
+              <p>{formatPrice(item.priceRange.minVariantPrice.amount)}</p>
               <img
                 src={item.images.edges[0].node.url}
                 alt={item.images.edges[0].node.altText}
@@ -29,11 +35,21 @@ function Cart() {
                 width="80"
               />
             </div>
-            <button onClick={() => handleRemoveFromCart(item.id)}>Remove</button>
+            <div>
+              <p>Quantity: </p>
+              <input
+                type="number"
+                value={quantity}
+                onChange={handleInputChange}
+              />
+              <button onClick={() => handleRemoveFromCart(item.id)}>
+                Remove
+              </button>
+            </div>
           </div>
         );
       })}
-      <button onClick={handleEmptyCart}>Empty Cart</button>
+      <button onClick={handleEmptyCart}>Clear Cart</button>
     </section>
   );
 }

@@ -1,4 +1,5 @@
 import Cart from "@/components/Cart";
+import Header from "@/components/Header";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -94,6 +95,7 @@ function Products({ singleProduct, products }) {
   const product = singleProduct;
   const price = singleProduct.priceRange;
   const [slicedProducts, setSlicedProducts] = useState([]);
+  const [quantity, setQuantity] = useState(0);
   const cart = useSelector((state) => state.cart);
 
   useEffect(() => {
@@ -107,16 +109,12 @@ function Products({ singleProduct, products }) {
 
   const dispatch = useDispatch();
 
-  const handleAddToCart = () => {
-    const alreadyInCart = cart.items.find(
-      (item) => item.id === singleProduct.id
-    );
-  
-    if (!alreadyInCart) {
-      dispatch(addToCart(singleProduct));
-    }
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+    setQuantity(1);
   };
-  
+
+  const productsInCart = useSelector((state) => state.cart.items);
 
   return (
     <>
@@ -133,9 +131,26 @@ function Products({ singleProduct, products }) {
         <meta property="og:url" content="https://www.example.com" />
       </Head>
 
-      <Cart />
+      <Header />
+
+      <Cart quantity={quantity} setQuantity={setQuantity} />
 
       <section>
+        {/* {productsInCart.length > 0 && (
+          <div className="products__inner__cart">
+            <h2>Cart</h2>
+            <div className="products__inner__cart__inner">
+              {productsInCart.map((product) => (
+                <div
+                  key={product.id}
+                  className="products__inner__cart__inner__item"
+                >
+                  {product.title}
+                </div>
+              ))}
+            </div>
+          </div>
+        )} */}
         <div className="products__inner">
           <h1>{product.title}</h1>
           <Image
@@ -151,7 +166,9 @@ function Products({ singleProduct, products }) {
             }}
           />
           <p>{formatPrice(price.minVariantPrice.amount)}</p>
-          <button onClick={handleAddToCart}>Add to cart</button>
+          <button onClick={() => handleAddToCart(singleProduct)}>
+            Add to cart
+          </button>
         </div>
         <div className="products__related">
           <h2>Related Products</h2>
