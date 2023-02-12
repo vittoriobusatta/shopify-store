@@ -8,87 +8,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "utils/slice";
 
-export async function getStaticPaths() {
-  const { data } = await storefront(
-    gql`
-      {
-        products(first: 8) {
-          edges {
-            node {
-              handle
-              id
-            }
-          }
-        }
-      }
-    `
-  );
-  return {
-    paths: data.products.edges.map(({ node }) => ({
-      params: {
-        handle: node.handle,
-      },
-    })),
-    fallback: false,
-  };
-}
 
-export async function getStaticProps({ params }) {
-  const { data } = await storefront(singleProductQuery(params.handle));
-  return {
-    props: {
-      singleProduct: data.productByHandle,
-      products: data.products,
-    },
-  };
-}
-
-const singleProductQuery = (handle) => gql`
-{
-productByHandle(handle: "${handle}") {
-    id
-    title
-    handle
-    description
-    priceRange {
-      minVariantPrice {
-        amount
-      }
-    }
-    images(first: 1) {
-    edges {
-        node {
-        url
-        altText
-        }
-    }
-    }
-}
-products(first: 8) {
-  edges {
-    node {
-      id
-      title
-      handle
-      productType
-      priceRange {
-        minVariantPrice {
-          amount
-        }
-      }
-      images(first: 1) {
-        edges {
-          node {
-            url
-            altText
-          }
-        }
-      }
-    }
-  }
-}
-}
-`;
 
 function Products({ singleProduct, products }) {
   const image = singleProduct.images.edges[0].node;
@@ -214,3 +134,85 @@ function Products({ singleProduct, products }) {
 }
 
 export default Products;
+
+export async function getStaticPaths() {
+  const { data } = await storefront(
+    gql`
+      {
+        products(first: 8) {
+          edges {
+            node {
+              handle
+              id
+            }
+          }
+        }
+      }
+    `
+  );
+  return {
+    paths: data.products.edges.map(({ node }) => ({
+      params: {
+        handle: node.handle,
+      },
+    })),
+    fallback: false,
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const { data } = await storefront(singleProductQuery(params.handle));
+  return {
+    props: {
+      singleProduct: data.productByHandle,
+      products: data.products,
+    },
+  };
+}
+
+const singleProductQuery = (handle) => gql`
+{
+productByHandle(handle: "${handle}") {
+    id
+    title
+    handle
+    description
+    priceRange {
+      minVariantPrice {
+        amount
+      }
+    }
+    images(first: 1) {
+    edges {
+        node {
+        url
+        altText
+        }
+    }
+    }
+}
+products(first: 8) {
+  edges {
+    node {
+      id
+      title
+      handle
+      productType
+      priceRange {
+        minVariantPrice {
+          amount
+        }
+      }
+      images(first: 1) {
+        edges {
+          node {
+            url
+            altText
+          }
+        }
+      }
+    }
+  }
+}
+}
+`;
