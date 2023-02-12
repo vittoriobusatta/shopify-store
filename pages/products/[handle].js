@@ -95,7 +95,6 @@ function Products({ singleProduct, products }) {
   const product = singleProduct;
   const price = singleProduct.priceRange;
   const [slicedProducts, setSlicedProducts] = useState([]);
-  const [quantity, setQuantity] = useState(0);
   const cart = useSelector((state) => state.cart);
 
   useEffect(() => {
@@ -110,11 +109,23 @@ function Products({ singleProduct, products }) {
   const dispatch = useDispatch();
 
   const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-    setQuantity(1);
-  };
 
-  const productsInCart = useSelector((state) => state.cart.items);
+    const productInCart = cart.items.find(
+      (item) => item.id === product.id
+    );
+
+    if (productInCart) {
+      dispatch(
+        addToCart({
+          ...product,
+          quantity: productInCart.quantity + 1,
+        })
+
+      );
+    } else {
+      dispatch(addToCart(product));
+    }
+  };
 
   return (
     <>
@@ -133,9 +144,9 @@ function Products({ singleProduct, products }) {
 
       <Header />
 
-      <Cart quantity={quantity} setQuantity={setQuantity} />
+      <Cart />
 
-      <section>
+      <section className="products">
         {/* {productsInCart.length > 0 && (
           <div className="products__inner__cart">
             <h2>Cart</h2>
@@ -152,7 +163,6 @@ function Products({ singleProduct, products }) {
           </div>
         )} */}
         <div className="products__inner">
-          <h1>{product.title}</h1>
           <Image
             width={286}
             height={429}
@@ -165,10 +175,14 @@ function Products({ singleProduct, products }) {
               width: "auto",
             }}
           />
-          <p>{formatPrice(price.minVariantPrice.amount)}</p>
+          <div>
+            <h1>{product.title}</h1>
+            <p>{formatPrice(price.minVariantPrice.amount)}</p>
+          </div>
           <button onClick={() => handleAddToCart(singleProduct)}>
-            Add to cart
+            Ajoutez au panier
           </button>
+          {/* <button>Acheter maintenant</button> */}
         </div>
         <div className="products__related">
           <h2>Related Products</h2>

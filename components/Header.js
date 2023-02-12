@@ -6,7 +6,7 @@ function Header() {
     <header>
       <Link href="/">
         <svg
-          height="25"
+          height="20"
           viewBox="0 0 209 35"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -17,6 +17,20 @@ function Header() {
           />
         </svg>
       </Link>
+      <svg
+        width="30"
+        height="10"
+        viewBox="0 0 20 8"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M1 1H19M1 7H19"
+          stroke="#064A3E"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
     </header>
   );
 }

@@ -1,9 +1,22 @@
 .products {
   margin-top: 62px;
   width: 100%;
+  padding: 0 18px;
   &__inner {
-    margin-top: 44px;
+    margin-top: 62px;
     margin-bottom: 88px;
+    & h1 {
+      font-size: 32px;
+      margin-top: 20px;
+      font-family: "Gentium Book Basic", serif;
+    }
+    & p {
+      font-size: 24px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-family: "Gentium Book Basic", serif;
+      color: #bb8b1b;
+    }
   }
   &__details {
     width: 100%;
