@@ -1,0 +1,26 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "generate-sitemap": "next-sitemap",
+    "build:sitemap": "npm run build && npm run generate-sitemap"
+  },
+  "author": "Vittorio Busatta",
+  "license": "ISC",
+  "dependencies": {
+    "@next/font": "^13.1.5",
+    "eslint": "^8.34.0",
+    "eslint-config-next": "^13.1.6",
+    "next": "^13.1.6",
+    "next-sitemap": "^3.1.52",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.58.0",
+    "shopify-api": "^0.2.3"
+  }
+}
