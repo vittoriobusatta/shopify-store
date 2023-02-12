@@ -58,10 +58,11 @@ function Cart() {
                         dispatch(
                           updateQuantity({
                             id: item.id,
-                            quantity: parseInt(e.target.value),
+                            quantity: Math.max(0, parseInt(e.target.value)),
                           })
                         );
                       }}
+                      min="0"
                     />
                   </div>
                   <svg

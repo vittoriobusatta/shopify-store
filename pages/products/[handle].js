@@ -105,7 +105,7 @@ function Products({ singleProduct, products }) {
           {/* <button>Acheter maintenant</button> */}
         </div>
         <div className="products__related">
-          <h2>Related Products</h2>
+          <h2>Vous aimerez peut-être aussi</h2>
           <div className="products__related__inner">
             {slicedProducts.map(({ node }) => (
               <div key={node.handle} className="products__related__inner__item">
