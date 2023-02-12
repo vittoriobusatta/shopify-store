@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, gql, storefront } from "pages/api/storefront";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "utils/slice";
 
 export async function getStaticPaths() {
@@ -94,6 +94,7 @@ function Products({ singleProduct, products }) {
   const product = singleProduct;
   const price = singleProduct.priceRange;
   const [slicedProducts, setSlicedProducts] = useState([]);
+  const cart = useSelector((state) => state.cart);
 
   useEffect(() => {
     const relatedProducts = products.edges
@@ -107,10 +108,15 @@ function Products({ singleProduct, products }) {
   const dispatch = useDispatch();
 
   const handleAddToCart = () => {
-    dispatch(addToCart(singleProduct));
+    const alreadyInCart = cart.items.find(
+      (item) => item.id === singleProduct.id
+    );
+  
+    if (!alreadyInCart) {
+      dispatch(addToCart(singleProduct));
+    }
   };
-
-  console.log(products.edges[0].node.id);
+  
 
   return (
     <>
