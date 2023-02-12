@@ -1,7 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
+import { storefront } from "./api/storefront";
 
-function Home() {
+export async function getStaticProps() {
+  const products = await storefront(productsQuery);
+  return {
+    props: {
+      products: products.data,
+    },
+  };
+}
+
+const gql = String.raw;
+
+const productsQuery = gql`
+  query Products {
+    products(first: 4) {
+      edges {
+        node {
+          title
+          handle
+          tags
+          priceRange {
+            minVariantPrice {
+              amount
+            }
+          }
+          images(first: 1) {
+            edges {
+              node {
+                url
+                altText
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+function Home({ products }) {
+  console.log(products);
+
   return (
     <>
       <Head>
@@ -16,8 +57,26 @@ function Home() {
         <meta property="og:image" content="/favicon.ico" />
         <meta property="og:url" content="https://www.example.com" />
       </Head>
+      <storefront />
       <main>
-        <h1>Home</h1>
+        <h1>Bienvenue sur mon site Next.js avec Shopify</h1>
+        <h2>Liste de produits</h2>
+        <ul>
+          {products.products.edges.map((product) => (
+            <li key={product.node.handle}>
+              <h3>{product.node.title}</h3>
+              <p>{product.node.tags}</p>
+              <p>{product.node.priceRange.minVariantPrice.amount}</p>
+              <ul>
+                {product.node.images.edges.map((image) => (
+                  <li key={image.node.url}>
+                    <img src={image.node.url} alt={image.node.altText} />
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
       </main>
     </>
   );
