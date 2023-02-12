@@ -11,12 +11,11 @@ function Cart() {
   };
 
   const handleRemoveFromCart = (id) => {
-    console.log(id);
     dispatch(removeFromCart({ id }));
   };
 
   return (
-    <div>
+    <section className="cart">
       {cart.items.map((item) => {
         return (
           <div key={item.id}>
@@ -26,8 +25,8 @@ function Cart() {
               <img
                 src={item.images.edges[0].node.url}
                 alt={item.images.edges[0].node.altText}
-                height="30"
-                width="30"
+                height="80"
+                width="80"
               />
             </div>
             <button onClick={() => handleRemoveFromCart(item.id)}>Remove</button>
@@ -35,7 +34,7 @@ function Cart() {
         );
       })}
       <button onClick={handleEmptyCart}>Empty Cart</button>
-    </div>
+    </section>
   );
 }
 
