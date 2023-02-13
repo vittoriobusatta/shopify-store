@@ -19,13 +19,33 @@
     }
   }
   &__details {
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    row-gap: 6px;
     &__row {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-direction: row;
+      &:first-child {
+        margin-top: 16px;
+      }
+      & h3 {
+        font-size: 24px;
+        font-family: "Gentium Book Basic", serif;
+        color: #04442c;
+      }
+      & h4 {
+        font-size: 16px;
+        color: #222;
+      }
+      & p {
+        font-size: 24px;
+        font-family: "Gentium Book Basic", serif;
+        color: #bb8b1b;
+      }
     }
   }
   &__related {
@@ -40,4 +60,14 @@
       flex-direction: row;
     }
   }
+}
+
+.popup {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  background-color: white;
+  padding: 20px;
+  z-index: 9999;
+  width: 100%;
 }

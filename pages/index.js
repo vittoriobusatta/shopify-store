@@ -91,7 +91,7 @@ function Home({ products }) {
                     </p>
                   </div>
                   <div className="products__details__row">
-                    <p>{product.productType}</p>
+                    <h4>{product.productType}</h4>
                   </div>
                 </div>
               </li>

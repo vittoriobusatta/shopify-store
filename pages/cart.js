@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { emptyCart, removeFromCart, updateQuantity } from "utils/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { formatPrice } from "pages/api/storefront";
+import Header from "@/components/Header";
+import Link from "next/link";
 
 function Cart() {
   const cart = useSelector((state) => state.cart);
@@ -40,19 +42,15 @@ function Cart() {
       }),
       mode: "payment",
       success_url: "http://localhost:3000",
-      cancel_url: "http://localhost:3000",
+      cancel_url: "http://localhost:3000/cart",
     });
     window.location.assign(session.url);
   };
 
-  // je veux stocker le panier dans le local storage pour qu'il soit toujours là même si je refresh la page ou que je quitte le site avec redux persist
-
-  
-
-
   return (
     <>
-      {/* {cart.items.length > 0 && ( */}
+      <Header />
+      {cart.items.length > 0 ? (
         <section className="cart">
           <h1>
             <p>Panier</p>
@@ -118,11 +116,18 @@ function Cart() {
             );
           })}
           <div>
-            <button onClick={handleEmptyCart}>Vider le panier</button>
-            <button onClick={createSession}>Payer Maintenant</button>
+            {/* <button onClick={handleEmptyCart}>Vider le panier</button> */}
+            <button onClick={createSession}>Allez au paiment</button>
           </div>
         </section>
-      {/* )} */}
+      ) : (
+        <section className="cart">
+          <h1>Votre panier est vide</h1>
+          <Link href="/">
+            <p>Retour à la boutique</p>
+          </Link>
+        </section>
+      )}
     </>
   );
 }
