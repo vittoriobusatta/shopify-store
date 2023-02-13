@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { emptyCart, removeFromCart, updateQuantity } from "utils/slice";
 import { useSelector, useDispatch } from "react-redux";
 import { formatPrice } from "pages/api/storefront";
@@ -24,18 +24,20 @@ function Cart() {
   const createSession = async () => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
-      line_items: [
-        {
+      line_items: cart.items.map((item) => {
+        return {
           price_data: {
             currency: "eur",
             product_data: {
-              name: "Product name",
+              name: item.title,
             },
-            unit_amount: 1000,
+            unit_amount: (item.priceRange.minVariantPrice.amount * 100).toFixed(
+              0
+            ),
           },
-          quantity: 1,
-        },
-      ],
+          quantity: item.quantity,
+        };
+      }),
       mode: "payment",
       success_url: "http://localhost:3000",
       cancel_url: "http://localhost:3000",
@@ -43,12 +45,14 @@ function Cart() {
     window.location.assign(session.url);
   };
 
+  // je veux stocker le panier dans le local storage pour qu'il soit toujours là même si je refresh la page ou que je quitte le site avec redux persist
+
   
 
 
   return (
     <>
-      {cart.items.length > 0 ? (
+      {/* {cart.items.length > 0 && ( */}
         <section className="cart">
           <h1>
             <p>Panier</p>
@@ -113,10 +117,12 @@ function Cart() {
               </div>
             );
           })}
-          <button onClick={handleEmptyCart}>Vider le panier</button>
-          <button onClick={createSession}>Payer</button>
+          <div>
+            <button onClick={handleEmptyCart}>Vider le panier</button>
+            <button onClick={createSession}>Payer Maintenant</button>
+          </div>
         </section>
-      ) : null}
+      {/* )} */}
     </>
   );
 }
