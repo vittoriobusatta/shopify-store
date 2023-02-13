@@ -41,8 +41,8 @@ function Cart() {
         };
       }),
       mode: "payment",
-      success_url: "http://localhost:3000",
-      cancel_url: "http://localhost:3000/cart",
+      success_url: "https://ouhkty-shop.vercel.app/",
+      cancel_url: "https://ouhkty-shop.vercel.app/cart",
     });
     window.location.assign(session.url);
   };
