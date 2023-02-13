@@ -19,6 +19,33 @@ function Cart() {
     return acc + item.priceRange.minVariantPrice.amount * item.quantity;
   }, 0);
 
+  const stripe = require("stripe")(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
+
+  const createSession = async () => {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "eur",
+            product_data: {
+              name: "Product name",
+            },
+            unit_amount: 1000,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: "http://localhost:3000",
+      cancel_url: "http://localhost:3000",
+    });
+    window.location.assign(session.url);
+  };
+
+  
+
+
   return (
     <>
       {cart.items.length > 0 ? (
@@ -87,6 +114,7 @@ function Cart() {
             );
           })}
           <button onClick={handleEmptyCart}>Vider le panier</button>
+          <button onClick={createSession}>Payer</button>
         </section>
       ) : null}
     </>
