@@ -154,6 +154,7 @@ function Products({ singleProduct, products }) {
 
 export default Products;
 
+
 export async function getStaticPaths() {
   const { data } = await storefront(
     gql`
