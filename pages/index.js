@@ -1,49 +1,18 @@
 import React from "react";
+import { getAllProducts } from "libs/shopify";
+import ProductList from "@/components/ProductList";
 import Head from "next/head";
-import { storefront, formatPrice, gql } from "./api/storefront";
-import Link from "next/link";
-import Image from "next/image";
-import Header from "@/components/Header";
 
 export async function getStaticProps() {
-  const products = await storefront(productsQuery);
+  const products = await getAllProducts();
   return {
     props: {
-      products: products.data,
+      products,
     },
   };
 }
 
-const productsQuery = gql`
-  query Products {
-    products(first: 8) {
-      edges {
-        node {
-          id
-          title
-          handle
-          productType
-          priceRange {
-            minVariantPrice {
-              amount
-            }
-          }
-          images(first: 1) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-function Home({ products }) {
-
+export default function Home({ products }) {
   return (
     <>
       <Head>
@@ -58,49 +27,8 @@ function Home({ products }) {
         <meta property="og:image" content="/favicon.ico" />
         <meta property="og:url" content="https://www.example.com" />
       </Head>
-      <main>
-        <Header />
-        <ul>
-          {products.products.edges.map((items) => {
-            const product = items.node;
-            const price = items.node;
-            return (
-              <li key={product.handle}>
-                {product.images.edges.map((img) => {
-                  const image = img.node;
-                  return (
-                    <Link
-                      href={`/products/${product.handle}`}
-                      key={product.handle}
-                    >
-                      <Image
-                        width={286}
-                        height={429}
-                        src={image.url}
-                        alt={image.altText}
-                        priority
-                      />
-                    </Link>
-                  );
-                })}
-                <div className="products__details">
-                  <div className="products__details__row">
-                    <h3>{product.title}</h3>
-                    <p>
-                      {formatPrice(price.priceRange.minVariantPrice.amount)}
-                    </p>
-                  </div>
-                  <div className="products__details__row">
-                    <h4>{product.productType}</h4>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </main>
+      <ProductList products={products} />
     </>
   );
 }
 
-export default Home;
