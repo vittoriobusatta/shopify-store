@@ -25,7 +25,6 @@ function ProductForm({ product }) {
   });
 
   const [selectedVariant, setSelectedVariant] = useState(allVariantsOptions[0]);
-  console.log(selectedVariant);
 
   return (
     <div>

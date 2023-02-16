@@ -1,3 +1,4 @@
+import { createCheckout } from "libs/shopify";
 import Image from "next/image";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,21 +20,13 @@ function cart() {
     dispatch(clearCart());
   };
 
-  console.log(cart.items);
-
-
   return (
     <div>
       <h1>Cart</h1>
       <ul>
         {cart.items.map((item) => (
           <li key={item.id}>
-            <Image
-                src={item.images}
-                alt={item.title}
-                width={80}
-                height={80}
-                />
+            <Image src={item.images} alt={item.title} width={80} height={80} />
             <div>
               <h3>{item.title}</h3>
               <p>{item.variantPrice}</p>
