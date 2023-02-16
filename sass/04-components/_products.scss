@@ -27,8 +27,9 @@
       width: 100%;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       flex-direction: row;
+      column-gap: 22px;
       &:first-child {
         margin-top: 16px;
       }
