@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { addToCart, clearCart, setQuantity } from "redux/slice";
 import { useDispatch, useSelector } from "react-redux";
-import { createCheckout } from "libs/shopify";
 
 export default function ProductPageContent({ product }) {
   const images = [];
@@ -15,9 +14,6 @@ export default function ProductPageContent({ product }) {
   const handleAddToCart = () => {
     dispatch(addToCart(product));
   };
-
-  const cart = useSelector((state) => state.cart);
-  
 
   return (
     <div>
@@ -47,10 +43,6 @@ export default function ProductPageContent({ product }) {
       >
         Add to cart
       </button>
-      
-      <button
-        onClick={() => createCheckout(cart)}>Looo</button>
-        
     </div>
   );
 }

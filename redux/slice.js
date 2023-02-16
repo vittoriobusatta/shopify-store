@@ -27,9 +27,6 @@ const cartSlice = createSlice({
         (total, cartItem) => total + cartItem.quantity,
         0
       );
-      // un code pour afficher les produits dans le panier
-      const checkout = createCheckout(state.items);
-      console.log(checkout);
 
     },
     clearCart: (state) => {
