@@ -8,7 +8,6 @@ function ProductCard({ product }) {
   const { altText, url } = product.node.images.edges[0].node;
   const { amount } = product.node.priceRange.minVariantPrice;
 
-  console.log(product);
 
   return (
     <li>

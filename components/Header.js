@@ -3,6 +3,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 function Header() {
+  const cart = useSelector((state) => state.cart);
+
   return (
     <header>
       <Link href="/">
@@ -36,10 +38,7 @@ function Header() {
             ></path>
           </svg>
           <span className="pre__jewel">
-            {/* {cart.items.reduce((acc, item) => {
-              return acc + item.quantity;
-            }, 0)} */}
-            12
+            {cart.quantity > 0 ? cart.quantity : 0}
           </span>
         </div>
       </Link>

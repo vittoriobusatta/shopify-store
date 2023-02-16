@@ -114,9 +114,6 @@ export async function getSingleProduct(handle) {
   const query = `
   {
     product(handle: "${handle}") {
-      color: metafield(namespace: "custom", key: "color") {
-        value
-      }
     	collections(first: 1) {
       	edges {
           node {
@@ -150,6 +147,9 @@ export async function getSingleProduct(handle) {
       title
       handle
       description
+      color: metafield(namespace: "custom", key: "color") {
+        value
+      }
       images(first: 5) {
         edges {
           node {
@@ -180,6 +180,9 @@ export async function getSingleProduct(handle) {
             priceV2 {
               amount
             }
+            color: metafield(namespace: "custom", key: "color") {
+              value
+            }
           }
         }
       }
@@ -191,4 +194,63 @@ export async function getSingleProduct(handle) {
   const product = response.data.product ? response.data.product : [];
 
   return product;
+}
+
+export async function createCheckout(id, quantity) {
+  const query = `
+  mutation {
+    checkoutCreate(input: {
+      lineItems: [{variantId: "${id}", quantity: ${quantity}}]
+    }) {
+      checkout {
+        id
+        webUrl
+      }
+    }
+  }
+  `;
+
+  const response = await shopifyData(query);
+
+  const checkout = response.data.checkoutCreate.checkout
+    ? response.data.checkoutCreate.checkout
+    : [];
+
+  return checkout;
+}
+
+export async function updateCheckout(id, lineItems) {
+  const lineItemsObject = lineItems.map((item) => {
+    return `{
+      variantId: "${item.id}",
+      quantity:  ${item.variantQuantity}
+    }`;
+  });
+
+  const query = `
+  mutation {
+    checkoutLineItemsReplace(lineItems: [${lineItemsObject}], checkoutId: "${id}") {
+      checkout {
+        id
+        webUrl
+        lineItems(first: 25) {
+          edges {
+            node {
+              id
+              title
+              quantity
+            }
+          }
+        }
+      }
+    }
+  }
+  `;
+  const response = await shopifyData(query);
+
+  const checkout = response.data.checkoutLineItemsReplace.checkout
+    ? response.data.checkoutLineItemsReplace.checkout
+    : [];
+
+  return checkout;
 }
