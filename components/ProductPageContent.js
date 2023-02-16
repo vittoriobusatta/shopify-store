@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { addToCart, clearCart, setQuantity } from "redux/slice";
-import { useDispatch, useSelector } from "react-redux";
+import ProductForm from "./ProductForm";
+
 
 export default function ProductPageContent({ product }) {
   const images = [];
@@ -9,11 +9,10 @@ export default function ProductPageContent({ product }) {
     images.push(image.node);
   });
 
-  const dispatch = useDispatch();
 
-  const handleAddToCart = () => {
-    dispatch(addToCart(product));
-  };
+ 
+
+  // console.log(product.variants.edges[0].node.id);
 
   return (
     <div>
@@ -37,12 +36,7 @@ export default function ProductPageContent({ product }) {
           />
         ))}
       </div>
-      <button
-       onClick={handleAddToCart}
-        className="product__button"
-      >
-        Add to cart
-      </button>
+      <ProductForm product={product}/>
     </div>
   );
 }

@@ -12,22 +12,28 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const item = action.payload;
+
       const itemInCart = state.items.find(
         (cartItem) => cartItem.id === item.id
       );
+
+      // const itemInCart = state.items.find(
+      //   (cartItem) => console.log(cartItem.id === item.id, cartItem.variantQuantity,)
+      // );
+
       if (itemInCart) {
-        itemInCart.quantity++;
+        itemInCart.variantQuantity++;
       } else {
         state.items.push({
           ...item,
-          quantity: 1,
+          variantQuantity: 1,
         });
       }
+
       state.quantity = state.items.reduce(
-        (total, cartItem) => total + cartItem.quantity,
+        (total, cartItem) => total + cartItem.variantQuantity,
         0
       );
-
     },
     clearCart: (state) => {
       state.items = [];
@@ -35,20 +41,40 @@ const cartSlice = createSlice({
       state.quantity = 0;
     },
     incrementQuantity: (state, action) => {
-      const itemId = action.payload;
-      const item = state.items.find((cartItem) => cartItem.id === itemId);
-      item.quantity++;
-      state.quantity++;
+      const item = action.payload;
+
+      const itemInCart = state.items.find(
+        (cartItem) => cartItem.id === item.id
+      );
+
+      if (itemInCart) {
+        itemInCart.variantQuantity++;
+      }
+
+      state.quantity = state.items.reduce(
+        (total, cartItem) => total + cartItem.variantQuantity,
+        0
+      );
     },
     decrementQuantity: (state, action) => {
-      const itemId = action.payload;
-      const item = state.items.find((cartItem) => cartItem.id === itemId);
-      item.quantity--;
-      state.quantity--;
-      if (item.quantity === 0) {
-        state.items = state.items.filter((cartItem) => cartItem.id !== itemId);
+      const item = action.payload;
+    
+      const itemInCart = state.items.find(
+        (cartItem) => cartItem.id === item.id
+      );
+    
+      if (itemInCart) {
+        if (itemInCart.variantQuantity > 1) {
+          itemInCart.variantQuantity--;
+        }
       }
-    },
+    
+      state.quantity = state.items.reduce(
+        (total, cartItem) => total + cartItem.variantQuantity,
+        0
+      );
+    }
+    
   },
 });
 

@@ -1,19 +1,26 @@
 import Image from "next/image";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { decrementQuantity, incrementQuantity } from "redux/slice";
+import { clearCart, decrementQuantity, incrementQuantity } from "redux/slice";
 
 function cart() {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
-  const handleIncrement = (itemId) => {
-    dispatch(incrementQuantity(itemId));
+  const handleIncrement = (item) => {
+    dispatch(incrementQuantity(item));
   };
 
-  const handleDecrement = (itemId) => {
-    dispatch(decrementQuantity(itemId));
+  const handleDecrement = (item) => {
+    dispatch(decrementQuantity(item));
   };
+
+  const emptyCart = () => {
+    dispatch(clearCart());
+  };
+
+  console.log(cart.items);
+
 
   return (
     <div>
@@ -21,21 +28,29 @@ function cart() {
       <ul>
         {cart.items.map((item) => (
           <li key={item.id}>
-            <p>
-              {item.title} - {item.quantity}
-            </p>
             <Image
-              src={item.images.edges[0].node.url}
-              alt={item.images.edges[0].node.altText}
-              width={80}
-              height={80}
-              priority
-            />
-            <button onClick={() => handleIncrement(item.id)}>+</button>
-            <button onClick={() => handleDecrement(item.id)}>-</button>
+                src={item.images}
+                alt={item.title}
+                width={80}
+                height={80}
+                />
+            <div>
+              <h3>{item.title}</h3>
+              <p>{item.variantPrice}</p>
+              <p>{item.variantQuantity}</p>
+              <button onClick={() => handleIncrement(item)}>+</button>
+              <button onClick={() => handleDecrement(item)}>-</button>
+            </div>
           </li>
         ))}
       </ul>
+      <button
+        onClick={() => {
+          emptyCart();
+        }}
+      >
+        Clear cart
+      </button>
     </div>
   );
 }
