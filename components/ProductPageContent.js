@@ -1,7 +1,6 @@
 import Image from "next/image";
 import ProductForm from "./ProductForm";
 
-
 export default function ProductPageContent({ product }) {
   const images = [];
 
@@ -9,21 +8,16 @@ export default function ProductPageContent({ product }) {
     images.push(image.node);
   });
 
-
- 
-
   // console.log(product.variants.edges[0].node.id);
 
   return (
-    <div>
-      <h1
-        className="product__title"
-        style={{
-          "--color": product.color.value,
-        }}
-      >
-        {product.title}
-      </h1>
+    <section
+      className="page__product"
+      style={{
+        "--color": product.color.value,
+      }}
+    >
+      <h1 className="product__title">{product.title}</h1>
       <div>
         {images.map((image) => (
           <Image
@@ -36,7 +30,7 @@ export default function ProductPageContent({ product }) {
           />
         ))}
       </div>
-      <ProductForm product={product}/>
-    </div>
+      <ProductForm product={product} />
+    </section>
   );
 }

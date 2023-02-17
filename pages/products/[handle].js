@@ -4,9 +4,9 @@ import React from "react";
 
 export default function ProductPage({ product }) {
   return (
-    <div>
+    <>
       <ProductPageContent product={product} />
-    </div>
+    </>
   );
 }
 

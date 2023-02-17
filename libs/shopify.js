@@ -212,6 +212,7 @@ export async function createCheckout(id, quantity) {
 
   const response = await shopifyData(query);
 
+
   const checkout = response.data.checkoutCreate.checkout
     ? response.data.checkoutCreate.checkout
     : [];
