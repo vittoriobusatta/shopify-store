@@ -255,3 +255,39 @@ export async function updateCheckout(id, lineItems) {
 
   return checkout;
 }
+
+export async function getCheckout(id) {
+  const query = `
+    {
+      node(id: "${id}") {
+        ... on Checkout {
+          id
+          completedAt
+          createdAt
+          updatedAt
+          webUrl
+          lineItems(first: 10) {
+            edges {
+              node {
+                title
+                quantity
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const response = await shopifyData(query);
+
+  if (!response.data) {
+    throw new Error("La requête GraphQL n'a pas réussi.");
+  }
+
+  const checkout = response.data.node ? response.data.node : [];
+
+  return checkout;
+}
+
+

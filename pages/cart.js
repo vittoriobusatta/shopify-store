@@ -1,12 +1,12 @@
 import { createCheckout } from "libs/shopify";
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart, decrementQuantity, incrementQuantity } from "redux/slice";
 import { formatPrice } from "utils/helpers";
-const stripe = require("stripe")(
-  "sk_test_51MatPNAqhd3qwoqxLzJyRAOtU2HUmxaDsIYYbbBJnEm0AyHYOvTunDBlrBQfWaHK2DUdAqqDCFUMgaZbU1abaSBL00ysDA5FWH"
-);
+
+const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST_KEY);
 
 function cart() {
   const cart = useSelector((state) => state.cart);
@@ -39,7 +39,7 @@ function cart() {
 
     for (const item of lineItems) {
       const checkout = await createCheckout(item.id, item.variantQuantity);
-
+      console.log(checkout.id);
       const session = await stripe.checkout.sessions
         .create({
           payment_method_types: ["card"],
@@ -73,39 +73,6 @@ function cart() {
     }
   };
 
-  //   const createsession = async () => {
-  //     const checkout = await createCheckout(item.id, item.quantity);
-
-  //     const session = await stripe.checkout.sessions
-  //       .create({
-  //         payment_method_types: ["card"],
-  //         line_items: cart.items.map((item) => {
-  //           return {
-  //             price_data: {
-  //               currency: "eur",
-  //               product_data: {
-  //                 name: item.title,
-  //               },
-  //               unit_amount: item.variantPrice * 100,
-  //             },
-  //             quantity: item.variantQuantity,
-  //           };
-  //         }),
-  //         mode: "payment",
-  //         success_url: "http://localhost:3000/success",
-  //         cancel_url: "http://localhost:3000/cancel",
-  //         metadata: {
-  //           checkout_id: checkout.id,
-  //         },
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //         alert("An error occurred while creating the session.");
-  //       });
-
-  //     window.location.assign(session.url);
-  //   };
-
   return (
     <div>
       <h1>Cart</h1>
@@ -113,7 +80,15 @@ function cart() {
       <ul>
         {cart.items.map((item) => (
           <li key={item.id}>
-            <Image src={item.images} alt={item.title} width={80} height={80} />
+            {console.log(item)}
+            <Link href={`/products/${item.handle}`}>
+              <Image
+                src={item.images}
+                alt={item.title}
+                width={80}
+                height={80}
+              />
+            </Link>
             <div>
               <h3>{item.title}</h3>
               <p>{formatPrice(item.variantPrice)}</p>
