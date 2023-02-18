@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { addToCart } from "redux/slice";
+import {ADD_TO_CART } from "redux/slice";
 import { useDispatch } from "react-redux";
 
 function ProductForm({ product }) {
   const dispatch = useDispatch();
 
-
+  const handleAddToCart = (item) => {
+    dispatch(ADD_TO_CART(item));
+  };
 
   const allVariantsOptions = product.variants.edges?.map((variant) => {
     const allOptions = {};
@@ -29,7 +31,7 @@ function ProductForm({ product }) {
   return (
     <div>
       <button
-        onClick={() => dispatch(addToCart(selectedVariant))}
+        onClick={() => handleAddToCart(selectedVariant)}
         className="product__button"
       >
         Add to cart

@@ -1,16 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createCheckout } from "libs/shopify";
 
-// crée un slice de state pour mon panier
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
     items: [],
-    total: 0,
+    checkout: null,
     quantity: 0,
+    totalPrice: 0,
   },
   reducers: {
-    addToCart: (state, action) => {
+    ADD_TO_CART: (state, action) => {
       const item = action.payload;
 
       const itemInCart = state.items.find(
@@ -27,55 +27,46 @@ const cartSlice = createSlice({
       }
 
       state.quantity = state.items.reduce(
-        (total, cartItem) => total + cartItem.variantQuantity,
+        (total, item) => total + item.variantQuantity,
+        0
+      );
+      state.totalPrice = state.items.reduce(
+        (total, item) => total + item.variantPrice * item.variantQuantity,
         0
       );
     },
-    clearCart: (state) => {
+    DEL_FROM_CART: (state, action) => {
+      const item = action.payload;
+      state.items = state.items.filter((cartItem) => cartItem.id !== item.id);
+
+      state.quantity = state.items.reduce(
+        (total, item) => total + item.variantQuantity,
+        0
+      );
+      state.totalPrice = state.items.reduce(
+        (total, item) => total + item.variantPrice * item.variantQuantity,
+        0
+      );
+    },
+    UPDATE_QUANTITY: (state, action) => {
+      const item = action.payload;
+      console.log(item);
+    },
+    CLEAR_CART: (state, action) => {
       state.items = [];
-      state.total = 0;
       state.quantity = 0;
-    },
-    incrementQuantity: (state, action) => {
-      const item = action.payload;
-
-      const itemInCart = state.items.find(
-        (cartItem) => cartItem.id === item.id
-      );
-
-      if (itemInCart) {
-        itemInCart.variantQuantity++;
-      }
-
-      state.quantity = state.items.reduce(
-        (total, cartItem) => total + cartItem.variantQuantity,
-        0
-      );
-    },
-    decrementQuantity: (state, action) => {
-      const item = action.payload;
-
-      const itemInCart = state.items.find(
-        (cartItem) => cartItem.id === item.id
-      );
-
-      if (itemInCart) {
-        if (itemInCart.variantQuantity > 1) {
-          itemInCart.variantQuantity--;
-        }
-      }
-
-      state.quantity = state.items.reduce(
-        (total, cartItem) => total + cartItem.variantQuantity,
-        0
-      );
+      state.totalPrice = 0;
+      state.checkout = null;
     },
   },
 });
 
-// exporte les actions du slice
-export const { addToCart, clearCart, incrementQuantity, decrementQuantity } =
-  cartSlice.actions;
+export const {
+  ADD_TO_CART,
+  DEL_FROM_CART,
+  UPDATE_QUANTITY,
+  CLEAR_CART,
+  UPDATE_CHECKOUT,
+} = cartSlice.actions;
 
-// exporte le reducer du slice
 export default cartSlice.reducer;

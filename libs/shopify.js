@@ -196,15 +196,29 @@ export async function getSingleProduct(handle) {
   return product;
 }
 
-export async function createCheckout(id, quantity) {
+export async function createCheckout(lineItems) {
+  const lineItemsObject = lineItems.map((item) => {
+    return `{
+      variantId: "${item.id}",
+      quantity:  ${item.variantQuantity}
+    }`;
+  });
+  
   const query = `
   mutation {
-    checkoutCreate(input: {
-      lineItems: [{variantId: "${id}", quantity: ${quantity}}]
-    }) {
+    checkoutCreate(input: {lineItems: [${lineItemsObject}]}) {
       checkout {
         id
         webUrl
+        lineItems(first: 25) {
+          edges {
+            node {
+              id
+              title
+              quantity
+            }
+          }
+        }
       }
     }
   }
@@ -220,17 +234,11 @@ export async function createCheckout(id, quantity) {
   return checkout;
 }
 
-export async function updateCheckout(id, lineItems) {
-  const lineItemsObject = lineItems.map((item) => {
-    return `{
-      variantId: "${item.id}",
-      quantity:  ${item.variantQuantity}
-    }`;
-  });
+export async function updateCheckout(checkoutId, lineItems) {
 
   const query = `
   mutation {
-    checkoutLineItemsReplace(lineItems: [${lineItemsObject}], checkoutId: "${id}") {
+    checkoutLineItemsReplace(lineItems: [${lineItems}], checkoutId: "${checkoutId}") {
       checkout {
         id
         webUrl
