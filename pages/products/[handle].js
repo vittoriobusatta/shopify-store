@@ -3,32 +3,20 @@ import { getAllProducts, getSingleProduct } from "libs/shopify";
 import React from "react";
 
 export default function ProductPage({ product }) {
-  return (
-    <>
-      <ProductPageContent product={product} />
-    </>
-  );
-}
+    return (
+      <>
+        <ProductPageContent product={product} />
+      </>
+    );
+  }
 
 export async function getStaticPaths() {
-  const products = await getAllProducts();
-
-  const paths = products.map((product) => ({
-    params: { handle: product.node.handle },
+  const paths = (await getAllProducts()).map((product) => ({
+    params: { handle: product.handle },
   }));
-
-  return {
-    paths,
-    fallback: false,
-  };
+  return { paths, fallback: false };
 }
 
 export async function getStaticProps({ params }) {
-  const product = await getSingleProduct(params.handle);
-
-  return {
-    props: {
-      product,
-    },
-  };
+  return { props: { product: await getSingleProduct(params.handle) } };
 }

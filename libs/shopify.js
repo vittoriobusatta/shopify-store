@@ -1,75 +1,37 @@
+const { ApolloClient, InMemoryCache, HttpLink, gql } = require("@apollo/client");
+
 const domain = process.env.SHOPIFY_STORE_DOMAIN;
-const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 
-// This function will fetch data from your Shopify store
-async function shopifyData(query) {
-  // Define the URL for your store
-  const URL = `https://${domain}/api/2023-01/graphql.json`;
+// Storefront API Access
+const storefrontApiAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+const storefrontApiVersion = process.env.SHOPIFY_STOREFRONT_API_VERSION;
 
-  try {
-    // Make a POST request to the URL
-    const response = await fetch(URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        accept: "application/json",
-        "X-Shopify-Storefront-Access-Token": storefrontAccessToken,
-      },
-      body: JSON.stringify({ query }),
-    });
+// Admin API Access
+const adminApiKey = process.env.SHOPIFY_ADMIN_API_KEY;
+const adminApiSecret = process.env.SHOPIFY_ADMIN_API_SECRET;
+const adminApiVersion = process.env.SHOPIFY_ADMIN_API_VERSION;
 
-    // Convert the response to JSON
-    const data = await response.json();
+// Create store client
+export const storeClient = new ApolloClient({
+  link: new HttpLink({
+    uri: `https://${domain}/api/${storefrontApiVersion}/graphql.json`,
+    headers: {
+      "X-Shopify-Storefront-Access-Token": storefrontApiAccessToken,
+    },
+  }),
+  cache: new InMemoryCache(),
+});
 
-    // Return the data
-    return data;
-  } catch (err) {
-    console.log(err, "Problem fetching data from Shopify");
-  }
-}
-
-// export async function getProductsInCollection() {
-//   // Get all products in the collection
-//   const query = `
-//   {
-//     collection(handle: "hijab-jersey") {
-//       title
-//       products(first: 25) {
-//         edges {
-//           node {
-//             id
-//             title
-//             handle
-//             priceRange {
-//               minVariantPrice {
-//                 amount
-//                 currencyCode
-//               }
-//             }
-//             images(first: 5) {
-//               edges {
-//                 node {
-//                   url
-//                   altText
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-//   `;
-
-//   const response = await shopifyData(query);
-
-//   // Check if any products were returned
-//   const allProducts = response.data.collection.products.edges
-//     ? response.data.collection.products.edges
-//     : [];
-
-//   return allProducts;
-// }
+// Create admin client
+const adminClient = new ApolloClient({
+  link: new HttpLink({
+    uri: `https://${domain}/admin/api/${adminApiVersion}/graphql.json`,
+    headers: {
+      "X-Shopify-Access-Token": adminApiKey,
+    },
+  }),
+  cache: new InMemoryCache(),
+});
 
 export async function getAllProducts() {
   const query = `
@@ -101,54 +63,37 @@ export async function getAllProducts() {
   }  
   `;
 
-  const response = await shopifyData(query);
+  try {
+    const response = await storeClient.query({
+      query: gql`
+        ${query}
+      `,
+    });
 
-  const slugs = response.data.products.edges
-    ? response.data.products.edges
-    : [];
-
-  return slugs;
+    return response.data.products.edges.map((edge) => edge.node);
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+  
 }
 
 export async function getSingleProduct(handle) {
   const query = `
   {
-    product(handle: "${handle}") {
-    	collections(first: 1) {
-      	edges {
-          node {
-            products(first: 5) {
-              edges {
-                node {
-                  priceRange {
-                    minVariantPrice {
-                      amount
-                    }
-                  }
-                  handle
-                  title
-                  id
-                  productType
-                  images(first: 5) {
-                    edges {
-                      node {
-                        url
-                        altText
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-    	}
+    productByHandle(handle: "${handle}") {
       id
-      title
       handle
+      title
       description
-      color: metafield(namespace: "custom", key: "color") {
-        value
+      productType
+      priceRange {
+        minVariantPrice {
+          amount
+        }
+      }
+      compareAtPriceRange{
+        minVariantPrice {amount}
       }
       images(first: 5) {
         edges {
@@ -158,65 +103,25 @@ export async function getSingleProduct(handle) {
           }
         }
       }
-      options {
-        name
-        values
-        id
+      color: metafield(namespace: "custom", key: "color") {
+        value
       }
-      variants(first: 25) {
+      variants(first: 250) {
         edges {
           node {
-            selectedOptions {
-              name
-              value
+            id
+            title
+            availableForSale
+            price {
+              amount
+            }
+            compareAtPrice {
+              amount
             }
             image {
               url
               altText
             }
-            title
-            id
-            availableForSale
-            priceV2 {
-              amount
-            }
-            color: metafield(namespace: "custom", key: "color") {
-              value
-            }
-          }
-        }
-      }
-    }
-  }`;
-
-  const response = await shopifyData(query);
-
-  const product = response.data.product ? response.data.product : [];
-
-  return product;
-}
-
-export async function createCheckout(lineItems) {
-  const lineItemsObject = lineItems.map((item) => {
-    return `{
-      variantId: "${item.id}",
-      quantity:  ${item.variantQuantity}
-    }`;
-  });
-  
-  const query = `
-  mutation {
-    checkoutCreate(input: {lineItems: [${lineItemsObject}]}) {
-      checkout {
-        id
-        webUrl
-        lineItems(first: 25) {
-          edges {
-            node {
-              id
-              title
-              quantity
-            }
           }
         }
       }
@@ -224,78 +129,17 @@ export async function createCheckout(lineItems) {
   }
   `;
 
-  const response = await shopifyData(query);
+  try {
+    const response = await storeClient.query({
+      query: gql`
+        ${query}
+      `,
+    });
 
-
-  const checkout = response.data.checkoutCreate.checkout
-    ? response.data.checkoutCreate.checkout
-    : [];
-
-  return checkout;
-}
-
-export async function updateCheckout(checkoutId, lineItems) {
-
-  const query = `
-  mutation {
-    checkoutLineItemsReplace(lineItems: [${lineItems}], checkoutId: "${checkoutId}") {
-      checkout {
-        id
-        webUrl
-        lineItems(first: 25) {
-          edges {
-            node {
-              id
-              title
-              quantity
-            }
-          }
-        }
-      }
-    }
+    return response.data.productByHandle;
+  } catch (err) {
+    console.error(err);
+    return [];
   }
-  `;
-  const response = await shopifyData(query);
-
-  const checkout = response.data.checkoutLineItemsReplace.checkout
-    ? response.data.checkoutLineItemsReplace.checkout
-    : [];
-
-  return checkout;
 }
-
-export async function getCheckout(id) {
-  const query = `
-    {
-      node(id: "${id}") {
-        ... on Checkout {
-          id
-          completedAt
-          createdAt
-          updatedAt
-          webUrl
-          lineItems(first: 10) {
-            edges {
-              node {
-                title
-                quantity
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-
-  const response = await shopifyData(query);
-
-  if (!response.data) {
-    throw new Error("La requête GraphQL n'a pas réussi.");
-  }
-
-  const checkout = response.data.node ? response.data.node : [];
-
-  return checkout;
-}
-
 

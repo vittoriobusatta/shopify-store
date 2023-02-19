@@ -1,10 +1,8 @@
-import { getCheckout } from "libs/shopify";
 import Image from "next/image";
 import ProductForm from "./ProductForm";
 
 export default function ProductPageContent({ product }) {
   const images = [];
-
   product.images.edges.forEach((image) => {
     images.push(image.node);
   });

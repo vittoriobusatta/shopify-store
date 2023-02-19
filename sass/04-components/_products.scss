@@ -89,3 +89,9 @@
 main {
   padding-top: 62px;
 }
+
+.product__price {
+  &--old {
+    text-decoration: line-through;
+  }
+}

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createCheckout } from "libs/shopify";
 
 const cartSlice = createSlice({
   name: "cart",
@@ -12,7 +11,6 @@ const cartSlice = createSlice({
   reducers: {
     ADD_TO_CART: (state, action) => {
       const item = action.payload;
-
       const itemInCart = state.items.find(
         (cartItem) => cartItem.id === item.id
       );
@@ -48,25 +46,15 @@ const cartSlice = createSlice({
         0
       );
     },
-    UPDATE_QUANTITY: (state, action) => {
-      const item = action.payload;
-      console.log(item);
-    },
-    CLEAR_CART: (state, action) => {
+    CLEAR_CART: (state) => {
       state.items = [];
       state.quantity = 0;
       state.totalPrice = 0;
       state.checkout = null;
-    },
+    }
   },
 });
 
-export const {
-  ADD_TO_CART,
-  DEL_FROM_CART,
-  UPDATE_QUANTITY,
-  CLEAR_CART,
-  UPDATE_CHECKOUT,
-} = cartSlice.actions;
+export const { ADD_TO_CART, DEL_FROM_CART, CLEAR_CART } = cartSlice.actions;
 
 export default cartSlice.reducer;

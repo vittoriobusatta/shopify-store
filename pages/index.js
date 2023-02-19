@@ -1,5 +1,5 @@
 import React from "react";
-import { getAllProducts } from "libs/shopify";
+import { getAllProducts, storeClient } from "libs/shopify";
 import ProductList from "@/components/ProductList";
 import Head from "next/head";
 
@@ -13,6 +13,7 @@ export async function getStaticProps() {
 }
 
 export default function Home({ products }) {
+  console.log(products);
   return (
     <>
       <Head>
@@ -31,4 +32,3 @@ export default function Home({ products }) {
     </>
   );
 }
-

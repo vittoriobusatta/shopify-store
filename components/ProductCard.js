@@ -4,10 +4,9 @@ import React from "react";
 import { formatPrice } from "utils/helpers";
 
 function ProductCard({ product }) {
-  const { handle, title, productType } = product.node;
-  const { altText, url } = product.node.images.edges[0].node;
-  const { amount } = product.node.priceRange.minVariantPrice;
-
+  const { handle, title, productType } = product;
+  const { altText, url } = product.images.edges[0].node;
+  const { amount } = product.priceRange.minVariantPrice;
 
   return (
     <li>
