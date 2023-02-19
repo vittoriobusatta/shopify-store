@@ -23,7 +23,7 @@ function cart() {
 
   const handleCheckout = async () => {
     const session = await createStripeSession(checkoutId, cart.items);
-    window.open(session, '_blank');
+    window.location.assign(session);
   };
 
   const disableCart = cart.items.length === 0;
