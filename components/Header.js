@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 function Header() {
-  const cart = useSelector((state) => state.cart);
+  const quantity = useSelector((state) => state.cart.quantity);
 
   return (
     <header>
@@ -38,7 +38,7 @@ function Header() {
             ></path>
           </svg>
           <span className="pre__jewel">
-            {cart.quantity > 0 ? cart.quantity : 0}
+            {quantity > 0 ? quantity : 0}
           </span>
         </div>
       </Link>

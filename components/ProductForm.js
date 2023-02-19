@@ -40,15 +40,6 @@ function ProductForm({ product }) {
     );
   };
 
-  const quantityOptions = [];
-  for (let i = 1; i <= 10; i++) {
-    quantityOptions.push(
-      <option key={i} value={i}>
-        {i}
-      </option>
-    );
-  }
-
   return (
     <form className="product__form">
       <h1>{product.title}</h1>
@@ -58,9 +49,6 @@ function ProductForm({ product }) {
           {formatPrice(product.compareAtPriceRange.minVariantPrice.amount)}
         </p>
       )}
-      {/* <button type="button" onClick={createCheckout}>
-        Checkout
-      </button> */}
       <button type="button" onClick={handleAddToCart}>
         Add to cart
       </button>
