@@ -14,10 +14,12 @@ function Footer() {
   }, [year]);
   return (
     <footer>
-      <p>© {year} - Ouhkty Shop | Tous droits réservés</p>
-      <p>
-        Réalisation par <a href="https://www.vittoriobusatta.fr/">Vittorio</a>
-      </p>
+      <div>
+        <p>© {year} - Ouhkty Shop | Tous droits réservés</p>
+        <p>
+          Réalisation par <a href="https://www.vittoriobusatta.fr/">Vittorio</a>
+        </p>
+      </div>
     </footer>
   );
 }

@@ -26,6 +26,8 @@ function cart() {
     window.open(session, '_blank');
   };
 
+  const disableCart = cart.items.length === 0;
+
   return (
     <div>
       <h1>Cart</h1>
@@ -67,6 +69,8 @@ function cart() {
         onClick={() => {
           handleCheckout();
         }}
+        disabled={disableCart}
+        className={disableCart ? "disabled" : ""}
       >
         Checkout
       </button>

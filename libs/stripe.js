@@ -1,4 +1,4 @@
-const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST_KEY);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const domain = process.env.SHOPIFY_STORE_DOMAIN;
 
 export async function createStripeSession(checkoutId, lineItems) {
