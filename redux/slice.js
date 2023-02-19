@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createCheckout } from "libs/shopify";
 
 const cartSlice = createSlice({
   name: "cart",

@@ -1,4 +1,9 @@
-const { ApolloClient, InMemoryCache, HttpLink, gql } = require("@apollo/client");
+const {
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+  gql,
+} = require("@apollo/client");
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN;
 
@@ -75,7 +80,6 @@ export async function getAllProducts() {
     console.error(err);
     return [];
   }
-  
 }
 
 export async function getSingleProduct(handle) {
@@ -143,3 +147,50 @@ export async function getSingleProduct(handle) {
   }
 }
 
+export async function createCheckout({ lineItems }) {
+  const lineItemsObject = lineItems.map((item) => {
+    return `{variantId: "${item.variantId}", quantity: ${item.quantity}}`;
+  });
+  const query = `
+  mutation {
+    checkoutCreate(input: {
+      lineItems: [${lineItemsObject}]
+      shippingAddress: {
+        firstName: "John",
+        lastName: "Doe",
+        address1: "123 Main St",
+        city: "Anytown",
+        country: "US",
+        province: "CA",
+        zip: "12345",
+        phone: "555-555-5555"
+      },
+      email: "john.doe@example.com"
+    }) {
+      checkout {
+        id
+        webUrl
+      }
+      checkoutUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+  
+`;
+
+  try {
+    const response = await storeClient.mutate({
+      mutation: gql`
+        ${query}
+      `,
+    });
+
+    return response.data.checkoutCreate;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}

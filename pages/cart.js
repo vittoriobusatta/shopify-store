@@ -32,9 +32,6 @@ function cart() {
               <h3>{item.title}</h3>
               <p>{item.quantity}</p>
               <Link href={`/products/${item.handle}`}>
-                {
-                  console.log(item)
-                }
                 <Image
                   src={item.images.url}
                   alt={item.images.altText}
