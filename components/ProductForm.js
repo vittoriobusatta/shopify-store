@@ -2,13 +2,13 @@ import React from "react";
 import { ADD_TO_CART } from "redux/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { formatPrice } from "utils/helpers";
-import { storeClient } from "libs/shopify";
-import { gql } from "@apollo/client";
+import { createCheckout } from "libs/shopify";
 
 function ProductForm({ product }) {
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart);
+  console.log(cart);
 
   const variants = [];
   product.variants.edges.forEach((variant) => {
@@ -20,48 +20,10 @@ function ProductForm({ product }) {
     variant = variants[0];
   }
 
-  const lineItems = cart.items.map((item) => {
-    return {
-      variantId: item.id,
-      quantity: item.variantQuantity,
-    };
-  });
-
-  async function createCheckout() {
-    const lineItemsObject = cart.items.map((item) => {
-      return `{
-        variantId: "${item.id}",
-        quantity:  ${item.variantQuantity}
-      }`;
-    });
-
-    const query = `
-    mutation {
-      checkoutCreate(input: {
-        lineItems: [${lineItemsObject}]
-      }) {
-        checkout {
-          id
-        }
-      }
-    }
-  `;
-
-    try {
-      const response = await storeClient.mutate({
-        mutation: gql`
-          ${query}
-        `,
-      });
-
-      return response.data.checkoutCreate.checkout.id;
-    } catch (err) {
-      console.error(err);
-      return [];
-    }
-  }
-
   const handleAddToCart = async () => {
+
+    const checkoutId = await createCheckout(cart.items);
+
     dispatch(
       ADD_TO_CART({
         id: variant.id,
@@ -73,6 +35,7 @@ function ProductForm({ product }) {
         },
         variantPrice: variant.price.amount,
         variantQuantity: 1,
+        checkoutId: checkoutId,
       })
     );
   };
@@ -95,9 +58,9 @@ function ProductForm({ product }) {
           {formatPrice(product.compareAtPriceRange.minVariantPrice.amount)}
         </p>
       )}
-      <button type="button" onClick={createCheckout}>
+      {/* <button type="button" onClick={createCheckout}>
         Checkout
-      </button>
+      </button> */}
       <button type="button" onClick={handleAddToCart}>
         Add to cart
       </button>

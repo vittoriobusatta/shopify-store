@@ -1,3 +1,4 @@
+import { createStripeSession } from "libs/stripe";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -5,10 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { CLEAR_CART, DEL_FROM_CART } from "redux/slice";
 import { formatPrice } from "utils/helpers";
 
-const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST_KEY);
-
 function cart() {
   const totalPrice = useSelector((state) => state.cart.totalPrice);
+  const checkoutId = useSelector((state) => state.cart.checkout);
   const cart = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
@@ -19,6 +19,11 @@ function cart() {
 
   const handleEmptyCart = () => {
     dispatch(CLEAR_CART());
+  };
+
+  const handleCheckout = async () => {
+    const session = await createStripeSession(checkoutId, cart.items);
+    window.open(session, '_blank');
   };
 
   return (
@@ -58,7 +63,13 @@ function cart() {
       >
         Clear cart
       </button>
-      <button>Checkout</button>
+      <button
+        onClick={() => {
+          handleCheckout();
+        }}
+      >
+        Checkout
+      </button>
     </div>
   );
 }

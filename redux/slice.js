@@ -33,6 +33,8 @@ const cartSlice = createSlice({
         (total, item) => total + item.variantPrice * item.variantQuantity,
         0
       );
+
+      state.checkout = item.checkoutId;
     },
     DEL_FROM_CART: (state, action) => {
       const item = action.payload;

@@ -147,39 +147,30 @@ export async function getSingleProduct(handle) {
   }
 }
 
-export async function createCheckout({ lineItems }) {
+export async function createCheckout(lineItems) {
   const lineItemsObject = lineItems.map((item) => {
-    return `{variantId: "${item.variantId}", quantity: ${item.quantity}}`;
+    return `{
+      variantId: "${item.id}",
+      quantity: ${item.variantQuantity}
+    }`;
   });
+
   const query = `
-  mutation {
-    checkoutCreate(input: {
-      lineItems: [${lineItemsObject}]
-      shippingAddress: {
-        firstName: "John",
-        lastName: "Doe",
-        address1: "123 Main St",
-        city: "Anytown",
-        country: "US",
-        province: "CA",
-        zip: "12345",
-        phone: "555-555-5555"
-      },
-      email: "john.doe@example.com"
-    }) {
-      checkout {
-        id
-        webUrl
-      }
-      checkoutUserErrors {
-        code
-        field
-        message
+    mutation {
+      checkoutCreate(input: {
+        lineItems: [${lineItemsObject}]
+      }) {
+        checkout {
+          id
+        }
+        checkoutUserErrors {
+          code
+          field
+          message
+        }
       }
     }
-  }
-  
-`;
+  `;
 
   try {
     const response = await storeClient.mutate({
@@ -188,7 +179,7 @@ export async function createCheckout({ lineItems }) {
       `,
     });
 
-    return response.data.checkoutCreate;
+    return response.data.checkoutCreate.checkout.id;
   } catch (err) {
     console.error(err);
     return [];
