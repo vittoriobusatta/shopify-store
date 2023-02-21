@@ -8,7 +8,6 @@ function ProductForm({ product }) {
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart);
-  console.log(cart);
 
   const variants = [];
   product.variants.edges.forEach((variant) => {

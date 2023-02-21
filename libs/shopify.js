@@ -11,11 +11,6 @@ const domain = process.env.SHOPIFY_STORE_DOMAIN;
 const storefrontApiAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 const storefrontApiVersion = process.env.SHOPIFY_STOREFRONT_API_VERSION;
 
-// Admin API Access
-const adminApiKey = process.env.SHOPIFY_ADMIN_API_KEY;
-const adminApiSecret = process.env.SHOPIFY_ADMIN_API_SECRET;
-const adminApiVersion = process.env.SHOPIFY_ADMIN_API_VERSION;
-
 // Create store client
 export const storeClient = new ApolloClient({
   link: new HttpLink({
@@ -27,16 +22,6 @@ export const storeClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-// Create admin client
-const adminClient = new ApolloClient({
-  link: new HttpLink({
-    uri: `https://${domain}/admin/api/${adminApiVersion}/graphql.json`,
-    headers: {
-      "X-Shopify-Access-Token": adminApiKey,
-    },
-  }),
-  cache: new InMemoryCache(),
-});
 
 export async function getAllProducts() {
   const query = `
