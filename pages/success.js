@@ -1,14 +1,13 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 
-function success() {
+function sucess() {
+
   return (
-      <section>
-        <p>
-          We appreciate your business! If you have any questions, please email
-          <a href="mailto:orders@example.com">orders@example.com</a>.
-        </p>
-      </section>
+    <div>
+      <h1>Success</h1>
+    </div>
   );
 }
 
-export default success;
+export default sucess;

@@ -1,3 +1,4 @@
+
 export function formatPrice(price) {
   return new Intl.NumberFormat("fr-FR", {
     style: "currency",
@@ -7,3 +8,4 @@ export function formatPrice(price) {
 }
 
 export const gql = String.raw;
+

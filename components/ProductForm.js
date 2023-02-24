@@ -3,6 +3,7 @@ import { ADD_TO_CART } from "redux/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { formatPrice } from "utils/helpers";
 import { createCheckout } from "libs/shopify";
+import { createStripeSession } from "libs/stripe";
 
 function ProductForm({ product }) {
   const dispatch = useDispatch();
@@ -20,7 +21,6 @@ function ProductForm({ product }) {
   }
 
   const handleAddToCart = async () => {
-
     const checkoutId = await createCheckout(cart.items);
 
     dispatch(
@@ -38,6 +38,8 @@ function ProductForm({ product }) {
       })
     );
   };
+
+  console.log(product, variant);
 
   return (
     <form className="product__form">

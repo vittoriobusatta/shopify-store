@@ -1,4 +1,4 @@
-import { createStripeSession } from "libs/stripe";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -10,6 +10,7 @@ function cart() {
   const totalPrice = useSelector((state) => state.cart.totalPrice);
   const checkoutId = useSelector((state) => state.cart.checkout);
   const cart = useSelector((state) => state.cart);
+  console.log(checkoutId);
 
   const dispatch = useDispatch();
 
@@ -21,9 +22,21 @@ function cart() {
     dispatch(CLEAR_CART());
   };
 
+  const url = "http://localhost:4242/api/stripe/create-checkout-session";
+
   const handleCheckout = async () => {
-    const session = await createStripeSession(checkoutId, cart.items);
-    window.location.assign(session);
+    axios
+      .post(url, {
+        items: cart.items,
+        checkoutId: checkoutId,
+      })
+      .then((res) => {
+        console.log(res.data.url);
+        window.location.href = res.data.url;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const disableCart = cart.items.length === 0;
