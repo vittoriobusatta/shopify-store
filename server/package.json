@@ -12,9 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "request": "^2.88.2",
-    "shopify-api-node": "^3.12.2"
+    "nodemon": "^2.0.20",
+    "shopify-api-node": "^3.12.2",
+    "stripe": "^11.12.0"
   }
 }
