@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const createCheckoutSession = require("./services/checkout");
 const webhook = require("./services/wehook");
+const { getSessionById } = require("./controllers/session");
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(
     },
   })
 );
+
 app.use(bodyParser.raw({ type: "application/json" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -26,5 +28,7 @@ app.get("/", (req, res) => {
 app.post("/create-checkout-session", createCheckoutSession);
 
 app.post("/webhook", webhook);
+
+app.get("/session/:sessionId", getSessionById);
 
 app.listen(4242, () => console.log("Running on port http://localhost:4242"));

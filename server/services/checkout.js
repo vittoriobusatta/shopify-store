@@ -1,6 +1,7 @@
 const stripeApi = require("../api/stripe");
 
-const domain = process.env.SHOPIFY_DOMAIN;
+// const domain = process.env.SHOPIFY_DOMAIN;
+const domain = "localhost:3000";
 
 async function createCheckoutSession(req, res) {
   const { items, checkoutId } = req.body;
@@ -52,6 +53,10 @@ async function createCheckoutSession(req, res) {
         },
       ],
       line_items: lineItems,
+      metadata: {
+        checkoutId,
+      },
+
       mode: "payment",
       success_url: `http://${domain}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `http://${domain}/cancel`,

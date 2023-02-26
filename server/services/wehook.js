@@ -1,3 +1,4 @@
+const createOrderFromStripe = require("../controllers/orders");
 const stripeApi = require("../api/stripe");
 const dotenv = require("dotenv");
 
@@ -7,12 +8,13 @@ let endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 // crée une fonction de webhook
 async function webhook(req, res) {
+  const payload = req.rawBody;
   const sig = req.headers["stripe-signature"];
 
   let event;
 
   try {
-    event = stripeApi.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
+    event = stripeApi.webhooks.constructEvent(payload, sig, endpointSecret);
   } catch (err) {
     // On error, log and return the error message
     console.log(`❌ Error message: ${err.message}`);
@@ -22,12 +24,11 @@ async function webhook(req, res) {
   // Handle the checkout.session.completed event
   if (event.type === "checkout.session.completed") {
     console.log("🔔 Payment received!");
-    const { object } = req.body.data;
-    const session = await stripeApi.checkout.sessions.retrieve(object.id);
-    await stripeApi.customers.create({
-      email: session.customer_details.email,
-      name: session.customer_details.name,
-    });
+    const checkoutSession = event.data.object;
+    console.log(checkoutSession.id); // l'identifiant unique du checkout session
+    console.log(checkoutSession.customer_details); // les détails du client
+    console.log(checkoutSession.amount_total); // le montant total payé
+    console.log(checkoutSession); // les éléments de ligne
   }
 
   // Return a response to acknowledge receipt of the event
