@@ -1,4 +1,4 @@
-const shopifyApi = require("../api/shopify");
+// const shopifyApi = require("../api/shopify");
 const stripeApi = require("../api/stripe");
 
 async function createOrderFromStripe(req, res) {
