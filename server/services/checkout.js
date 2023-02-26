@@ -1,5 +1,4 @@
 const stripeApi = require("../api/stripe");
-
 // const domain = process.env.SHOPIFY_DOMAIN;
 const domain = "localhost:3000";
 

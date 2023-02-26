@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { CLEAR_CART } from "redux/slice";
 
 function sucess() {
   const router = useRouter();
   let sessionId = router.query.session_id;
   const [customerDetails, setCustomerDetails] = useState([]);
+  const dispatch = useDispatch();
 
   async function getSessionById(sessionId) {
     const response = await axios.get(
@@ -18,6 +21,7 @@ function sucess() {
     if (sessionId) {
       getSessionById(sessionId).then((session) => {
         setCustomerDetails(session.customer_details);
+        session.payment_status === "paid" && dispatch(CLEAR_CART());
       });
     }
   }, [sessionId]);
