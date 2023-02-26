@@ -4,12 +4,11 @@
   "description": "",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node server/server.js",
     "start": "next start",
     "lint": "next lint",
     "generate-sitemap": "next-sitemap",
-    "build:sitemap": "npm run build && npm run generate-sitemap",
-    "build:app": "next build && node server/server.js"
+    "build:sitemap": "npm run build && npm run generate-sitemap"
   },
   "author": "Vittorio Busatta",
   "license": "ISC",
