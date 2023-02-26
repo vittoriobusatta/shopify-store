@@ -1,6 +1,6 @@
 const stripeApi = require("../api/stripe");
 
-const domain = "localhost:3000";
+const domain = process.env.SHOPIFY_DOMAIN;
 
 async function createCheckoutSession(req, res) {
   const { items, checkoutId } = req.body;
