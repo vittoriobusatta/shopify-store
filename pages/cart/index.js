@@ -10,7 +10,6 @@ function cart() {
   const totalPrice = useSelector((state) => state.cart.totalPrice);
   const checkoutId = useSelector((state) => state.cart.checkout);
   const cart = useSelector((state) => state.cart);
-  console.log(checkoutId);
 
   const dispatch = useDispatch();
 
@@ -22,24 +21,25 @@ function cart() {
     dispatch(CLEAR_CART());
   };
 
-  const url = "http://localhost:4242/api/stripe/create-checkout-session";
+  const url = "http://localhost:4242/create-checkout-session";
+
+  const disableCart = cart.items.length === 0;
 
   const handleCheckout = async () => {
+    if (disableCart) return;
+
     axios
       .post(url, {
         items: cart.items,
         checkoutId: checkoutId,
       })
       .then((res) => {
-        console.log(res.data.url);
         window.location.href = res.data.url;
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  const disableCart = cart.items.length === 0;
 
   return (
     <div>

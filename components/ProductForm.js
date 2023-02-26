@@ -39,8 +39,6 @@ function ProductForm({ product }) {
     );
   };
 
-  console.log(product, variant);
-
   return (
     <form className="product__form">
       <h1>{product.title}</h1>

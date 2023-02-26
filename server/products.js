@@ -8,10 +8,10 @@ dotenv.config();
 const app = express();
 app.use(cors());
 
-const DOMAIN_NAME = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN;
-const API_KEY = process.env.NEXT_PUBLIC_SHOPIFY_ADMIN_API_KEY;
-const API_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_ADMIN_ACCESS_TOKEN;
-const API_VERSION = process.env.NEXT_PUBLIC_SHOPIFY_ADMIN_API_VERSION;
+const DOMAIN_NAME = process.env.SHOPIFY_DOMAIN;
+const API_KEY = process.env.SHOPIFY_ADMIN_API_KEY;
+const API_TOKEN = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
+const API_VERSION = process.env.SHOPIFY_ADMIN_API_VERSION;
 const endpoint = "products"
 
 let options = {
