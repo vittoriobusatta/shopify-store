@@ -7,13 +7,15 @@
 
 # testing
 /coverage
-
 # next.js
 /.next/
 /out/
 
+
 # production
 /build
+
+client/.next/
 
 # misc
 .DS_Store
@@ -30,7 +32,6 @@ yarn-error.log*
 
 # vercel
 .vercel
-
 
 # typescript
 *.tsbuildinfo
