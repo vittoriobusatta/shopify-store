@@ -1,6 +1,6 @@
-const createOrderFromStripe = require("../controllers/orders");
 const stripeApi = require("../api/stripe");
 const dotenv = require("dotenv");
+const createOrderFromStripe = require("../controllers/orders");
 
 dotenv.config();
 
@@ -25,10 +25,12 @@ async function webhook(req, res) {
   if (event.type === "checkout.session.completed") {
     console.log("🔔 Payment received!");
     const checkoutSession = event.data.object;
-    console.log(checkoutSession.id); // l'identifiant unique du checkout session
-    console.log(checkoutSession.customer_details); // les détails du client
-    console.log(checkoutSession.amount_total); // le montant total payé
-    console.log(checkoutSession); // les éléments de ligne
+    console.log(checkoutSession);
+
+    // Créer la commande depuis Stripe
+    // await createOrderFromStripe({
+    //   body: checkoutSession,
+    // });
   }
 
   // Return a response to acknowledge receipt of the event

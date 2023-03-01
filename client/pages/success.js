@@ -10,13 +10,6 @@ function sucess() {
   const [customerDetails, setCustomerDetails] = useState([]);
   const dispatch = useDispatch();
 
-  async function getSessionById(sessionId) {
-    const response = await axios.get(
-      `http://localhost:4242/session/${sessionId}`
-    );
-    return response.data;
-  }
-
   useEffect(() => {
     if (sessionId) {
       getSessionById(sessionId).then((session) => {
@@ -25,6 +18,15 @@ function sucess() {
       });
     }
   }, [sessionId]);
+
+  async function getSessionById(sessionId) {
+    const response = await axios.get(
+      `http://localhost:4242/session/${sessionId}`
+    );
+    return response.data;
+  }
+
+  
 
   return (
     <div>
@@ -37,8 +39,7 @@ function sucess() {
 
       <p>
         We have received your order and we are processing it. You will receive
-        an email to {customerDetails.email}
-        with the details of your order.
+        an email to {customerDetails.email} with the details of your order.
       </p>
     </div>
   );
