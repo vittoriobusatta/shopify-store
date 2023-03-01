@@ -1,5 +1,6 @@
 const stripeApi = require("../api/stripe");
-const domain = process.env.CLIENT_HOSTNAME;
+// const domain = process.env.CLIENT_HOSTNAME;
+const domain = "https://localhost:3000"
 
 async function createCheckoutSession(req, res) {
   const { items, checkoutId } = req.body;
@@ -51,14 +52,11 @@ async function createCheckoutSession(req, res) {
         },
       ],
       line_items: lineItems,
-      metadata: {
-        checkoutId,
-      },
-
       mode: "payment",
       success_url: `https://${domain}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `https://${domain}/cancel`,
       client_reference_id: checkoutId,
+      expand : ["line_items"]
     });
 
     res.status(200).json({

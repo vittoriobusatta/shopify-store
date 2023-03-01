@@ -25,12 +25,11 @@ async function webhook(req, res) {
   if (event.type === "checkout.session.completed") {
     console.log("🔔 Payment received!");
     const checkoutSession = event.data.object;
-    console.log(checkoutSession);
 
     // Créer la commande depuis Stripe
-    // await createOrderFromStripe({
-    //   body: checkoutSession,
-    // });
+    await createOrderFromStripe({
+      body: checkoutSession,
+    });
   }
 
   // Return a response to acknowledge receipt of the event
