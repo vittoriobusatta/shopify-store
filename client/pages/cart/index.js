@@ -21,7 +21,7 @@ function cart() {
     dispatch(CLEAR_CART());
   };
 
-  const url = "http://localhost:4242/create-checkout-session";
+  const url = `https://${process.env.SERVER_HOSTNAME}/create-checkout-session`;
 
   const disableCart = cart.items.length === 0;
 
@@ -57,6 +57,7 @@ function cart() {
                   alt={item.images.altText}
                   width={100}
                   height={100}
+                  priority
                 />
               </Link>
               <p>{formatPrice(item.variantPrice)}</p>

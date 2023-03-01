@@ -14,6 +14,8 @@ module.exports = {
     STRIPE_SECRET_TEST_KEY: process.env.NEXT_PUBLIC_STRIPE_SECRET_TEST_KEY,
     STRIPE_SECRET_KEY: process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY,
 
+    SERVER_HOSTNAME: process.env.NEXT_PUBLIC_SERVER_HOSTNAME,
+
   },
   images: {
     domains: ["cdn.shopify.com"],
