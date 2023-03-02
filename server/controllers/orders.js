@@ -10,7 +10,6 @@ const API_VERSION = process.env.SHOPIFY_ADMIN_API_VERSION;
 const endpoint = "orders";
 
 async function createShopifyOrder(order) {
-
   try {
     const url = `https://${API_KEY}:${API_TOKEN}@${DOMAIN_NAME}/admin/api/${API_VERSION}/${endpoint}.json`;
     const response = await axios.post(url, { order });
@@ -23,7 +22,10 @@ async function createShopifyOrder(order) {
 
 async function createOrderFromStripe(req, res) {
   const session = req.body;
-  console.log(session.client_reference_id);
+  console.log(session);
+
+
+
   // Créer la commande Shopify
   // const order = {
   //   line_items: session.display_items.map((item) => {
@@ -76,5 +78,7 @@ async function createOrderFromStripe(req, res) {
   //   res.status(400).json({ message: error });
   // }
 }
+
+
 
 module.exports = createOrderFromStripe;
