@@ -4,7 +4,8 @@ const createOrderFromStripe = require("../controllers/orders");
 
 dotenv.config();
 
-let endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+// let endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+let endpointSecret = "whsec_6dbb49a7e6e2709cadc4b7e7d8e130f84c4eaff6831b3c92e68f73a81603a0e3";
 
 // crée une fonction de webhook
 async function webhook(req, res) {
@@ -24,12 +25,7 @@ async function webhook(req, res) {
   // Handle the checkout.session.completed event
   if (event.type === "checkout.session.completed") {
     console.log("🔔 Payment received!");
-    const checkoutSession = event.data.object;
 
-    // Créer la commande depuis Stripe
-    await createOrderFromStripe({
-      body: checkoutSession,
-    });
   }
 
   // Return a response to acknowledge receipt of the event

@@ -20,10 +20,10 @@ async function createShopifyOrder(order) {
   }
 }
 
+
 async function createOrderFromStripe(req, res) {
   const session = req.body;
   console.log(session);
-
 
 
   // Créer la commande Shopify

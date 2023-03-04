@@ -22,7 +22,6 @@ export const storeClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-
 export async function getAllProducts() {
   const query = `
   {
@@ -147,6 +146,7 @@ export async function createCheckout(lineItems) {
       }) {
         checkout {
           id
+          webUrl
         }
         checkoutUserErrors {
           code
@@ -165,6 +165,49 @@ export async function createCheckout(lineItems) {
     });
 
     return response.data.checkoutCreate.checkout.id;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
+
+export async function getCheckout(checkoutId) {
+  const query = `
+    {
+      node(id: "${checkoutId}") {
+        ... on Checkout {
+          id
+          webUrl
+          lineItems(first: 250) {
+            edges {
+              node {
+                id
+                title
+                quantity
+                variant {
+                  id
+                  title
+                  image {
+                    originalSrc
+                    altText
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await storeClient.query({
+      query: gql`
+        ${query}
+      `,
+    });
+
+    return response.data.node;
   } catch (err) {
     console.error(err);
     return [];

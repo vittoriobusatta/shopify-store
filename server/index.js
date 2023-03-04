@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
-const createCheckoutSession = require("./services/checkout");
 const webhook = require("./services/wehook");
 const { getSessionById } = require("./controllers/session");
 
@@ -24,8 +23,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.send("Welcome to the server!");
 });
-
-// app.post("/create-checkout-session", createCheckoutSession);
 
 app.post("/webhook", webhook);
 
