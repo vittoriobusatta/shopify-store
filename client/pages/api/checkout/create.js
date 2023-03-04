@@ -1,11 +1,4 @@
-import Stripe from "stripe";
-
-const stripeClient = new Stripe(
-  process.env.NEXT_PUBLIC_STRIPE_SECRET_TEST_KEY,
-  {
-    apiVersion: "2022-11-15",
-  }
-);
+import stripeClient from "../../../libs/stripe";
 
 // const domain = process.env.CLIENT_HOSTNAME;
 const domain = process.env.NEXT_PUBLIC_CLIENT_HOSTNAME_LOCAL;
