@@ -21,7 +21,7 @@ function cart() {
     dispatch(CLEAR_CART());
   };
 
-  const url = `${process.env.NEXT_PUBLIC_SERVER_HOSTNAME}/api/checkout/create`;
+  const url = `/api/checkout/create`;
 
   const disableCart = cart.items.length === 0;
 
