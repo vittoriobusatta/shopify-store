@@ -1,7 +1,7 @@
 import stripeClient from "../../../libs/stripe";
 
 // const domain = process.env.CLIENT_HOSTNAME;
-const domain = process.env.NEXT_PUBLIC_CLIENT_HOSTNAME_LOCAL;
+const domain = process.env.NEXT_PUBLIC_CLIENT_HOSTNAME;
 
 async function createCheckoutSession(req, res) {
   const { items, checkoutId } = req.body;
