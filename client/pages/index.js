@@ -1,10 +1,8 @@
 import React from "react";
-import { getAllProducts, storeClient } from "libs/shopify";
+import { getAllProducts} from "libs/shopify";
 import ProductList from "@/components/ProductList";
 import Head from "next/head";
-import axios from "axios";
-import Image from "next/image";
-import Link from "next/link";
+
 
 export async function getStaticProps() {
   const products = await getAllProducts();
