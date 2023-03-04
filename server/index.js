@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the server!");
 });
 
-app.post("/create-checkout-session", createCheckoutSession);
+// app.post("/create-checkout-session", createCheckoutSession);
 
 app.post("/webhook", webhook);
 
