@@ -3,7 +3,6 @@ import { ADD_TO_CART } from "redux/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { formatPrice } from "utils/helpers";
 import { createCheckout } from "libs/shopify";
-import { createStripeSession } from "libs/stripe";
 
 function ProductForm({ product }) {
   const dispatch = useDispatch();
