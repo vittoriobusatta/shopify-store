@@ -32,11 +32,11 @@ button {
   text-transform: uppercase;
 }
 .pre {
-    padding: 8px;
-    cursor: pointer;
-    display: inline-flex;
-    position: relative;
-    align-items: center;
+  padding: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
   &__jewel {
     display: block;
     position: absolute;
@@ -46,5 +46,58 @@ button {
     font-size: 9px;
     margin-top: 5px;
     color: #112926;
+  }
+}
+
+.cart_list {
+  display: flex;
+  justify-items: center;
+  flex-direction: column;
+  padding: 52px 26px;
+  row-gap: 26px;
+  @media screen and (min-width: 418px) {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  @media screen and (min-width: 576px) {
+    padding: 0 32px;
+  }
+  @media screen and (min-width: 768px) {
+    padding: 0 42px;
+  }
+  @media screen and (min-width: 992px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media screen and (min-width: 1224px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  & li {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: row;
+    width: 100%;
+    & h3 {
+      font-size: 20px;
+      font-weight: 400;
+      margin: 0;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    & p {
+      font-size: 14px;
+      font-weight: 400;
+    }
+    & a {
+      text-decoration: none;
+      color: #112926;
+      font-size: 14px;
+      margin-top: 10px;
+      width: fit-content;
+      cursor: pointer;
+    }
+  }
+  & img {
+    width: auto;
+    height: 120px;
   }
 }

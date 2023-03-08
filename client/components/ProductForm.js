@@ -1,8 +1,7 @@
-import React from "react";
-import { ADD_TO_CART } from "redux/slice";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { CREATE_CART, CLEAR_CART, ADD_TO_CART } from "redux/slice";
 import { formatPrice } from "utils/helpers";
-import { createCheckout } from "libs/shopify";
 
 function ProductForm({ product }) {
   const dispatch = useDispatch();
@@ -19,23 +18,20 @@ function ProductForm({ product }) {
     variant = variants[0];
   }
 
-  const handleAddToCart = async () => {
-    const checkoutId = await createCheckout(cart.items);
+  const item = {
+    id: variant.id,
+    title: product.title,
+    handle: product.handle,
+    variantQuantity: 1,
+    cartId: cart.id,
+  };
 
-    dispatch(
-      ADD_TO_CART({
-        id: variant.id,
-        title: product.title,
-        handle: product.handle,
-        images: {
-          url: product.images.edges[0].node.url,
-          altText: product.images.edges[0].node.altText,
-        },
-        variantPrice: variant.price.amount,
-        variantQuantity: 1,
-        checkoutId: checkoutId,
-      })
-    );
+  const handleCreateCart = async () => {
+    if (cart.id === null) {
+      dispatch(CREATE_CART(item));
+    } else {
+      dispatch(ADD_TO_CART(item));
+    }
   };
 
   return (
@@ -47,8 +43,15 @@ function ProductForm({ product }) {
           {formatPrice(product.compareAtPriceRange.minVariantPrice.amount)}
         </p>
       )}
-      <button type="button" onClick={handleAddToCart}>
+      <button type="button" onClick={handleCreateCart}>
         Add to cart
+      </button>
+      <button
+        onClick={() => {
+          dispatch(CLEAR_CART());
+        }}
+      >
+        Clear cart
       </button>
     </form>
   );

@@ -7,11 +7,10 @@ import { CLEAR_CART, DEL_FROM_CART } from "redux/slice";
 import { formatPrice } from "utils/helpers";
 
 function cart() {
-  const totalPrice = useSelector((state) => state.cart.totalPrice);
-  const checkoutId = useSelector((state) => state.cart.checkout);
   const cart = useSelector((state) => state.cart);
-
   const dispatch = useDispatch();
+
+  const disableCart = cart.items.length === 0;
 
   const handleDeleteItem = (item) => {
     dispatch(DEL_FROM_CART(item));
@@ -21,17 +20,14 @@ function cart() {
     dispatch(CLEAR_CART());
   };
 
-  const url = `/api/checkout/create`;
-
-  const disableCart = cart.items.length === 0;
-
   const handleCheckout = async () => {
-    if (disableCart) return;
+    const url = `/api/checkout/create`;
 
+    if (disableCart) return;
     axios
       .post(url, {
         items: cart.items,
-        checkoutId: checkoutId,
+        cartId: cart.id,
       })
       .then((res) => {
         window.location.href = res.data.url;
@@ -42,32 +38,63 @@ function cart() {
   };
 
   return (
-    <div>
-      <h1>Cart</h1>
-      <h2>Total: {totalPrice}</h2>
-      <ul>
-        {cart.items.map((item) => {
+    <section>
+      <h1>Panier</h1>
+      <h2>
+        {cart.quantity} {cart.quantity > 1 ? "articles" : "article"}
+      </h2>
+      <h2>Total: {formatPrice(cart.chargeAmount)}</h2>
+      <ul className="cart_list">
+        {cart.items.map((products) => {
+          const { title, handle } = products.item;
+          const { image, price, quantityAvailable } =
+            products.line.node.merchandise;
+          const { quantity } = products.line.node;
           return (
-            <li key={item.id}>
-              <h3>{item.title}</h3>
-              <p>{item.quantity}</p>
-              <Link href={`/products/${item.handle}`}>
-                <Image
-                  src={item.images.url}
-                  alt={item.images.altText}
-                  width={100}
-                  height={100}
-                  priority
-                />
-              </Link>
-              <p>{formatPrice(item.variantPrice)}</p>
-              <button
-                onClick={() => {
-                  handleDeleteItem(item);
+            <li key={products.line.node.id}>
+              <div
+                style={{
+                  flex: 1,
                 }}
               >
-                Delete
-              </button>
+                <Link href={`/products/${handle}`}>
+                  <Image
+                    src={image.url}
+                    alt={image.altText}
+                    width={100}
+                    height={100}
+                    priority
+                  />
+                </Link>
+              </div>
+              <div
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <div>
+                  <h3>{title}</h3>
+                </div>
+                <p>Quantity : {quantity}</p>
+                <p>
+                  {quantityAvailable <= 10
+                    ? `Only ${quantityAvailable} left in stock`
+                    : ""}
+                </p>
+                <p>{formatPrice(price.amount)}</p>
+                <a
+                  onClick={() => {
+                    handleDeleteItem({
+                      id: products.line.node.id,
+                      cartId: cart.id,
+                    });
+                  }}
+                >
+                  Delete
+                </a>
+              </div>
             </li>
           );
         })}
@@ -88,7 +115,7 @@ function cart() {
       >
         Checkout
       </button>
-    </div>
+    </section>
   );
 }
 

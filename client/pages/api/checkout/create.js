@@ -1,35 +1,31 @@
 import stripeClient from "../../../libs/stripe";
 
-const domain = process.env.NEXT_PUBLIC_CLIENT_HOSTNAME;
-// const domain = "http://localhost:3000";
+// const domain = process.env.NEXT_PUBLIC_CLIENT_HOSTNAME;
+const domain = "http://localhost:3000";
 
 async function createCheckoutSession(req, res) {
-  const { items, checkoutId } = req.body;
+  const { items, cartId } = req.body;
   const lineItems = items.map((item) => {
+    const { title } = item.item;
+    const { price, image } = item.line.node.merchandise;
+    const { quantity } = item.line.node;
     return {
       price_data: {
         currency: "eur",
         product_data: {
-          name: item.title,
-          images: [item.images.url],
-          metadata: {
-            handle: item.handle,
-            id: item.id,
-          },
+          name: title,
+          images: [
+            image.url,
+          ],
         },
-        unit_amount: item.variantPrice * 100,
+        unit_amount: price.amount * 100,
       },
-      quantity: item.variantQuantity,
+      quantity: quantity,
     };
   });
 
   if (lineItems.length === 0) {
     res.status(400).json({ message: "No items in cart" });
-    return;
-  }
-
-  if (!checkoutId) {
-    res.status(400).json({ message: "No checkout id" });
     return;
   }
 
@@ -56,7 +52,9 @@ async function createCheckoutSession(req, res) {
       mode: "payment",
       success_url: `${domain}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${domain}/cart`,
-      client_reference_id: checkoutId,
+      metadata: {
+        cartId: cartId,
+      },
     });
 
     res.status(200).json({ sessionId: session.id, url: session.url });

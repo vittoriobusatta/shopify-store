@@ -3,7 +3,6 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const webhook = require("./services/wehook");
-const { getSessionById } = require("./controllers/session");
 
 dotenv.config();
 
@@ -25,8 +24,5 @@ app.get("/", (req, res) => {
 });
 
 app.post("/webhook", webhook);
-
-app.get("/session/:sessionId", getSessionById);
-
 
 app.listen(4242, () => console.log("Running on port http://localhost:4242"));

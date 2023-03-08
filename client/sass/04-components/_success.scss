@@ -1,0 +1,21 @@
+.success {
+  &__content {
+    padding: 12px 26px;
+    & h1 {
+      font-size: 22px;
+      font-weight: 600;
+      padding-bottom: 18px;
+    }
+    & p {
+      font-size: 16px;
+      font-weight: 400;
+      &:last-child {
+        padding-top: 18px;
+      }
+    }
+    a {
+      font-size: 16px;
+      font-weight: 400;
+    }
+  }
+}

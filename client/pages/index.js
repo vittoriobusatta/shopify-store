@@ -1,10 +1,10 @@
 import React from "react";
-import { getAllProducts} from "libs/shopify";
 import ProductList from "@/components/ProductList";
 import Head from "next/head";
+import { getAllProducts } from "libs/shopify/storefront";
 
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const products = await getAllProducts();
   return {
     props: {

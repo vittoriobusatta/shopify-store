@@ -1,5 +1,5 @@
 import ProductPageContent from "@/components/ProductPageContent";
-import { getAllProducts, getSingleProduct } from "libs/shopify";
+import { getAllProducts, getSingleProduct } from "libs/shopify/storefront";
 import React from "react";
 
 export default function ProductPage({ product }) {
