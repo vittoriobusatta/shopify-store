@@ -30,38 +30,34 @@ function Success({ data }) {
     return savedValue !== null ? JSON.parse(savedValue) : false;
   });
   const dispatch = useDispatch();
-  const { name, email, adress, phone } = data.customer_details;
+  const { name, email } = data.customer_details;
 
   let url = "/api/order/create";
+
+  const handleOrderCreation = () => {
+    dispatch(CLEAR_CART());
+    getCart(data.metadata.cartId)
+      .then((res) => {
+        setCartData(res.lines.edges);
+        setOrderData(data);
+        return axios.post(url, { orderData, cartData });
+      })
+      .then((res) => {
+        if (res.data.isCreate === true) {
+          setIsOrderCreated(true);
+        }
+      })
+      .catch((err) => {
+        console.log("Error creating order:", err);
+      });
+  };
 
   useEffect(() => {
     if (data) {
       setIsLoading(false);
     }
     if (data.payment_status === "paid" && data.metadata.cartId) {
-      dispatch(CLEAR_CART());
-      getCart(data.metadata.cartId)
-        .then((res) => {
-          setCartData(res.lines.edges);
-        })
-        .catch((err) => {
-          console.log("err", err);
-        });
-      setOrderData(data);
-      axios
-        .post(url, {
-          orderData,
-          cartData,
-        })
-        .then((res) => {
-          console.log("res", res.data.message);
-          if (res.data.isCreate === true) {
-            setIsOrderCreated(true);
-          }
-        })
-        .catch((err) => {
-          console.log("err", err);
-        });
+      handleOrderCreation();
     }
   }, [data]);
 
@@ -69,32 +65,21 @@ function Success({ data }) {
     localStorage.setItem("isOrderCreated", JSON.stringify(isOrderCreated));
   }, [isOrderCreated]);
 
-  console.log(isOrderCreated);
-
   return (
     <section className="success">
       <Spinner isLoading={isLoading} />
       <div className="success__content">
         <h1>
-          Thanks for your order
-          {data && name ? `, ${name}` : ""}
+          Thanks for your order{data && name ? `, ${name}` : ""}
         </h1>
-
         <p>
           We have received your order and we are processing it. You will receive
           an email to {email} with the details of your order.
         </p>
-
         <p>
           If you have any questions, please contact us at{" "}
-          <a
-            href="mailto:
-        "
-          >
-            .
-          </a>
+          <a href="mailto:">email@example.com</a>.
         </p>
-
         <p>
           <a href="/">Back to home</a>
         </p>
@@ -102,5 +87,6 @@ function Success({ data }) {
     </section>
   );
 }
+
 
 export default Success;
