@@ -24,13 +24,13 @@ async function createShopifyOrder(order) {
 //   const { data } = req.body;
 //   console.log("data", data);
 //   res.status(200).json({ data });
-//   // const { orderData, cartData } = data;
-//   // const {
-//   //   customer_details,
-//   //   shipping_details,
-//   //   amount_subtotal,
-//   //   payment_status,
-//   // } = orderData;
+  // const { orderData, cartData } = data;
+  // const {
+  //   customer_details,
+  //   shipping_details,
+  //   amount_subtotal,
+  //   payment_status,
+  // } = orderData;
 
 //   // const order = {
 //   //   line_items: cartData.map((item) => {

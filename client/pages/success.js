@@ -25,8 +25,14 @@ function Success({ data }) {
   const [isLoading, setIsLoading] = useState(true);
   const [orderData, setOrderData] = useState([]);
   const [cartData, setCartData] = useState([]);
+  const [isOrderCreated, setIsOrderCreated] = useState(() => {
+    const savedValue = localStorage.getItem("isOrderCreated");
+    return savedValue !== null ? JSON.parse(savedValue) : false;
+  });
   const dispatch = useDispatch();
   const { name, email, adress, phone } = data.customer_details;
+
+  let url = "/api/order/create";
 
   useEffect(() => {
     if (data) {
@@ -42,28 +48,28 @@ function Success({ data }) {
           console.log("err", err);
         });
       setOrderData(data);
+      axios
+        .post(url, {
+          orderData,
+          cartData,
+        })
+        .then((res) => {
+          console.log("res", res.data.message);
+          if (res.data.isCreate === true) {
+            setIsOrderCreated(true);
+          }
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
     }
-
   }, [data]);
 
-  const getData = async () => {
+  useEffect(() => {
+    localStorage.setItem("isOrderCreated", JSON.stringify(isOrderCreated));
+  }, [isOrderCreated]);
 
-    let url = "/api/order/create";
-    axios
-      .post(url, {
-        orderData,
-        cartData,
-      })
-      .then((res) => {
-        console.log(res.data.message);
-      })
-      .catch((err) => {
-        console.log("err", err);
-      })
-  };
-
-
-  // console.log("orderData", orderData);
+  console.log(isOrderCreated);
 
   return (
     <section className="success">
@@ -92,13 +98,6 @@ function Success({ data }) {
         <p>
           <a href="/">Back to home</a>
         </p>
-        <button
-          onClick={() => {
-            getData();
-          }}
-        >
-          Create Order
-        </button>
       </div>
     </section>
   );
