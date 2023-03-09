@@ -24,10 +24,9 @@ export async function getServerSideProps(context) {
 function Success({ data }) {
   const [isLoading, setIsLoading] = useState(true);
   const [orderData, setOrderData] = useState([]);
+  const [cartData, setCartData] = useState([]);
   const dispatch = useDispatch();
   const { name, email, adress, phone } = data.customer_details;
-
-  // console.log("data session", { data });
 
   useEffect(() => {
     if (data) {
@@ -37,15 +36,34 @@ function Success({ data }) {
       dispatch(CLEAR_CART());
       getCart(data.metadata.cartId)
         .then((res) => {
-          setOrderData(res.lines.edges);
+          setCartData(res.lines.edges);
         })
         .catch((err) => {
           console.log("err", err);
         });
+      setOrderData(data);
     }
+
   }, [data]);
 
-  console.log("orderData", orderData);
+  const getData = async () => {
+
+    let url = "/api/order/create";
+    axios
+      .post(url, {
+        orderData,
+        cartData,
+      })
+      .then((res) => {
+        console.log(res.data.message);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      })
+  };
+
+
+  // console.log("orderData", orderData);
 
   return (
     <section className="success">
@@ -74,6 +92,13 @@ function Success({ data }) {
         <p>
           <a href="/">Back to home</a>
         </p>
+        <button
+          onClick={() => {
+            getData();
+          }}
+        >
+          Create Order
+        </button>
       </div>
     </section>
   );

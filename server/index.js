@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const webhook = require("./services/wehook");
+const createDraftOrder = require("./controllers/orders");
 
 dotenv.config();
 
@@ -24,5 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/webhook", webhook);
+
+app.post("/orders", createDraftOrder);
 
 app.listen(4242, () => console.log("Running on port http://localhost:4242"));
