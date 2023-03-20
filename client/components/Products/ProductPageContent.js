@@ -17,7 +17,7 @@ export default function ProductPageContent({ product }) {
         "--color": product.color.value,
       }}
     >
-      <h1 className="product__title">{product.title}</h1>
+      {/* <h1 className="product__title">{product.title}</h1> */}
       <div className="product_container">
         <div className="products__image__placeholder" />
         {images.map((image) => (
