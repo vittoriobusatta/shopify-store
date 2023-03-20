@@ -20,6 +20,7 @@ function Footer() {
           Réalisation par <a href="https://www.vittoriobusatta.fr/">Vittorio</a>
         </p>
       </div>
+
     </footer>
   );
 }
