@@ -360,3 +360,62 @@ export async function getCart(cartId) {
     return [];
   }
 }
+
+export async function updateCart(cartId, lineId, quantity) {
+  const mutation = `
+    mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineInput!]!) {
+      cartLinesUpdate(cartId: $cartId, lines: $lines) {
+        cart {
+          id
+          totalQuantity
+          lines(first: 10) {
+            edges {
+              node {
+                id
+                quantity
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                    quantityAvailable
+                    availableForSale
+                    price {
+                      amount
+                    }
+                    image {
+                      url
+                      altText
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  
+  const variables = {
+    cartId,
+    lines: [
+      {
+        id: lineId,
+        quantity,
+      },
+    ],
+  };
+
+  try {
+    const response = await storeClient.mutate({
+      mutation: gql`
+        ${mutation}
+      `,
+      variables,
+    });
+
+    return response.data.cartLinesUpdate.cart;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
