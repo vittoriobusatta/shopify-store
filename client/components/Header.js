@@ -9,15 +9,15 @@ function Header() {
   return (
     <header>
       <Link href="/">
-        <h1>
-          HIJAB
-        </h1>
+        <h1>HIJAB</h1>
       </Link>
       <div>
         <SearchIcon />
         <Link className="pre" href="/cart">
           <CartIcon />
-          <span className="pre__jewel">{quantity > 0 ? quantity : 0}</span>
+          <span className="pre__jewel">
+            {quantity > 9 ? "9+" : quantity > 0 ? quantity : 0}
+          </span>
         </Link>
       </div>
     </header>
