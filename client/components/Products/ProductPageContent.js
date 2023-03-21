@@ -1,8 +1,9 @@
 import Image from "next/image";
 import ProductForm from "./ProductForm";
 import { useState } from "react";
+import RecommendedList from "./RecommendedList";
 
-export default function ProductPageContent({ product }) {
+export default function ProductPageContent({ product, allProducts }) {
   const [Loading, setLoading] = useState(true);
 
   const images = [];
@@ -28,7 +29,6 @@ export default function ProductPageContent({ product }) {
             width={286}
             height={429}
             onLoadingComplete={() => setLoading(false)}
-            priority
             className={`product__image__img ${
               !Loading ? "product__image__img--visible" : ""
             }
@@ -38,6 +38,8 @@ export default function ProductPageContent({ product }) {
       </div>
 
       <ProductForm product={product} />
+
+      <RecommendedList current={product} allProducts={allProducts}/>
     </section>
   );
 }

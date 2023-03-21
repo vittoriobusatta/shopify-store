@@ -1,19 +1,20 @@
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CREATE_CART, ADD_TO_CART } from "redux/slice";
 import { formatPrice } from "utils/helpers";
+import { CloseIcon, SuccessIcon } from "../Vector";
 
 const ProductQuantity = ({ quantityAvailable }) => {
-  if (quantityAvailable <= 10) {
+  if (quantityAvailable <= 5) {
     return (
-      <span className="product_quantity">
-        Seulement {quantityAvailable} en stock
+      <span className="product_quantity orange_warn">
+        Plus que quelques exemplaires disponibles.
       </span>
     );
   }
-  return <span className="product_quantity">En stock</span>;
 };
 
 function ProductForm({ product }) {
@@ -22,7 +23,6 @@ function ProductForm({ product }) {
   const [showPopup, setShowPopup] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const popupTimeout = useRef(null);
-  const [productQuantity, setProductQuantity] = useState(1);
 
   const cart = useSelector((state) => state.cart);
 
@@ -40,6 +40,7 @@ function ProductForm({ product }) {
     id: variant.id,
     title: product.title,
     handle: product.handle,
+    productType: product.productType,
     variantQuantity: 1,
     cartId: cart.id,
     image: {
@@ -107,29 +108,51 @@ function ProductForm({ product }) {
     <>
       {showPopup && (
         <div className="popup">
-          <h1>Ajouté au panier !</h1>
-          <h1
-            onClick={() => {
-              setShowPopup(false);
-            }}
-          >
-            CLOSE
-          </h1>
-          <div>
-            <h2>{cartResponse.item.title}</h2>
-            <h3>{formatPrice(cartResponse.item.price)}</h3>
+          <div className="popup__head">
+            <span className="popup__head__success">
+              <SuccessIcon />
+              <h3>Ajouté au panier !</h3>
+            </span>
+            <a
+              className="popup__close"
+              onClick={() => {
+                setShowPopup(false);
+              }}
+            >
+              <CloseIcon />
+            </a>
+          </div>
+          <div className="popup__product">
+            <Link href={`/products/${cartResponse.item.handle}`}>
+              <Image
+                key={cartResponse.item.id}
+                src={cartResponse.item.image.src}
+                alt={cartResponse.item.image.alt}
+                width={55}
+                height={55}
+                className="popup__product__image"
+              />
+            </Link>
+            <div className="popup__product__info">
+              <h1>{cartResponse.item.title}</h1>
+              <h2>{cartResponse.item.productType}</h2>
+              <h3>{formatPrice(cartResponse.item.price)}</h3>
+            </div>
           </div>
 
-          <Link href="/cart">
-            <button>Voir le panier ({cart.quantity})</button>
-          </Link>
-          <button
-            onClick={() => {
-              handleCheckout();
-            }}
-          >
-            Paiement
-          </button>
+          <div className="popup__button">
+            <Link className="popup__button__cart" href="/cart">
+              Voir le panier ({cart.quantity})
+            </Link>
+            <button
+              className="popup__button__checkout"
+              onClick={() => {
+                handleCheckout();
+              }}
+            >
+              Paiement
+            </button>
+          </div>
         </div>
       )}
       <div className="product__form">
@@ -163,9 +186,16 @@ function ProductForm({ product }) {
           </button>
         </div> */}
       </div>
-      <button type="button" onClick={handleCreateCart} disabled={isProcessing}>
-        Add to cart
-      </button>
+      <div className="product__button">
+        <button
+          className="product__button__addcart"
+          type="button"
+          onClick={handleCreateCart}
+          disabled={isProcessing}
+        >
+          Ajouter au panier
+        </button>
+      </div>
     </>
   );
 }
