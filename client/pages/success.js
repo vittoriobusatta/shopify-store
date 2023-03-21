@@ -16,62 +16,65 @@ export async function getServerSideProps(context) {
   const data = await res.data;
   return {
     props: {
-      data,
+      sessionData: data,
     },
   };
 }
 
-function Success({ data }) {
+function Success({ sessionData }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [orderData, setOrderData] = useState([]);
   const [cartData, setCartData] = useState([]);
-  const [isOrderCreated, setIsOrderCreated] = useState(() => {
-    const savedValue = localStorage.getItem("isOrderCreated");
-    return savedValue !== null ? JSON.parse(savedValue) : false;
-  });
   const dispatch = useDispatch();
-  const { name, email } = data.customer_details;
+  const { name, email } = sessionData.customer_details;
+
+  // const [isOrderCreated, setIsOrderCreated] = useState(() => {
+  //   const savedValue = localStorage.getItem("isOrderCreated");
+  //   return savedValue !== null ? JSON.parse(savedValue) : false;
+  // });
 
   let url = "/api/order/create";
 
+
   const handleOrderCreation = () => {
-    dispatch(CLEAR_CART());
-    getCart(data.metadata.cartId)
-      .then((res) => {
-        setCartData(res.lines.edges);
-        setOrderData(data);
-        return axios.post(url, { orderData, cartData });
-      })
-      .then((res) => {
-        if (res.data.isCreate === true) {
-          setIsOrderCreated(true);
-        }
-      })
-      .catch((err) => {
-        console.log("Error creating order:", err);
-      });
+    if (sessionData.payment_status === "paid" && sessionData.metadata.cartId) {
+      dispatch(CLEAR_CART());
+      getCart(sessionData.metadata.cartId)
+        .then((res) => {
+          setCartData(res.lines.edges);
+          return axios.post(url, {
+            orderData: sessionData,
+            cartData,
+          });
+        })
+        .then((res) => {
+          console.log(res.data.message);
+        })
+        .catch((err) => {
+          console.log("Error creating order:", err);
+        });
+    }
   };
 
-  useEffect(() => {
-    if (data) {
-      setIsLoading(false);
-    }
-    if (data.payment_status === "paid" && data.metadata.cartId) {
-      handleOrderCreation();
-    }
-  }, [data]);
+
 
   useEffect(() => {
-    localStorage.setItem("isOrderCreated", JSON.stringify(isOrderCreated));
-  }, [isOrderCreated]);
+    if (sessionData) {
+      setIsLoading(false);
+    }
+  }, [sessionData]);
+
+
+  // console.log(sessionData);
+
+  // useEffect(() => {
+  //   localStorage.setItem("isOrderCreated", JSON.stringify(isOrderCreated));
+  // }, [isOrderCreated]);
 
   return (
     <section className="success">
       <Spinner isLoading={isLoading} />
       <div className="success__content">
-        <h1>
-          Thanks for your order{data && name ? `, ${name}` : ""}
-        </h1>
+        <h1>Thanks for your order{sessionData && name ? `, ${name}` : ""}</h1>
         <p>
           We have received your order and we are processing it. You will receive
           an email to {email} with the details of your order.
@@ -83,10 +86,10 @@ function Success({ data }) {
         <p>
           <a href="/">Back to home</a>
         </p>
+        <button onClick={handleOrderCreation}>Create order</button>
       </div>
     </section>
   );
 }
-
 
 export default Success;

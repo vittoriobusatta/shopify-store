@@ -19,7 +19,6 @@ async function createShopifyOrder(order) {
 
 export default async function handler(req, res) {
   const { orderData, cartData } = req.body;
-  const { isOrderCreated } = req.query;
   const {
     customer_details,
     shipping_details,
@@ -27,69 +26,65 @@ export default async function handler(req, res) {
     payment_status,
   } = orderData;
 
-  console.log(orderData);
+  // if (orderData.length === 0 && isOrderCreated === true) {
+  //   console.log("Commande déjà créée");
+  //   res.status(200).json({ message: "Commande déjà créée" });
+  //   return;
+  // }
 
-  
+  // if (orderData.length === 0) {
+  //   console.log("Aucune commande à créer");
+  //   res.status(200).json({ message: "Aucune commande à créer" });
+  //   return;
+  // }
 
-  if (orderData.length === 0) {
-    console.log("Aucune commande à créer");
-    res.status(200).json({ message: "Aucune commande à créer" });
-    return;
+  const order = {
+    email: "tonibusatta@gmail.com",
+    line_items: cartData.map((item) => ({
+      variant_id: item.node.merchandise.id.match(/\d+/g).join(""),
+      quantity: item.node.quantity,
+      price: item.node.merchandise.price.amount,
+    })),
+    customer: {
+      first_name: shipping_details.name.split(" ")[0],
+      last_name: shipping_details.name.split(" ")[1],
+      email: customer_details.email,
+    },
+    billing_address: {
+      first_name: shipping_details.name.split(" ")[0],
+      last_name: shipping_details.name.split(" ")[1],
+      address1: shipping_details.address.line1,
+      address2: shipping_details.address.line2,
+      city: shipping_details.address.city,
+      province: shipping_details.address.state,
+      country: shipping_details.address.country,
+      zip: shipping_details.address.postal_code,
+    },
+    shipping_address: {
+      first_name: shipping_details.name.split(" ")[0],
+      last_name: shipping_details.name.split(" ")[1],
+      address1: shipping_details.address.line1,
+      address2: shipping_details.address.line2,
+      city: shipping_details.address.city,
+      province: shipping_details.address.state,
+      country: shipping_details.address.country,
+      zip: shipping_details.address.postal_code,
+    },
+    inventory_behaviour: "decrement_ignoring_policy",
+    subtotal_price: amount_subtotal / 100,
+    financial_status: payment_status,
+    send_fulfillment_receipt: true,
+  };
+
+  try {
+    await createShopifyOrder(order);
+    res.status(200).json({
+      message: "La commande a été créée avec succès",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Une erreur est survenue lors de la création de la commande",
+    });
   }
-
-  
-
-    const order = {
-      email: "tonibusatta@gmail.com",
-      line_items: [
-        {
-          variant_id: "gid://shopify/ProductVariant/44510946787602",
-          quantity: 3,
-          price: "20.00",
-          name: "Jersey",
-          title: "chiffon-pale-rose",
-        },
-      ],
-      customer: {
-        first_name: shipping_details.name.split(" ")[0],
-        last_name: shipping_details.name.split(" ")[1],
-        email: customer_details.email,
-      },
-      billing_address: {
-        first_name: shipping_details.name.split(" ")[0],
-        last_name: shipping_details.name.split(" ")[1],
-        address1: shipping_details.address.line1,
-        address2: shipping_details.address.line2,
-        city: shipping_details.address.city,
-        province: shipping_details.address.state,
-        country: shipping_details.address.country,
-        zip: shipping_details.address.postal_code,
-      },
-      shipping_address: {
-        first_name: shipping_details.name.split(" ")[0],
-        last_name: shipping_details.name.split(" ")[1],
-        address1: shipping_details.address.line1,
-        address2: shipping_details.address.line2,
-        city: shipping_details.address.city,
-        province: shipping_details.address.state,
-        country: shipping_details.address.country,
-        zip: shipping_details.address.postal_code,
-      },
-      subtotal_price: amount_subtotal / 100,
-      financial_status: payment_status,
-    };
-
-    try {
-      await createShopifyOrder(order);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        message: "Une erreur est survenue lors de la création de la commande",
-        isCreate: false,
-      });
-    }
-
-  res
-    .status(200)
-    .json({ message: "La commande a été créée avec succès", isCreate: true });
 }
