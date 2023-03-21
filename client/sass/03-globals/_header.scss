@@ -9,6 +9,10 @@ header {
   min-height: 60px;
   z-index: 999;
   padding: 12px 26px;
+  background-color: $background_color;
+  & h1 {
+    color: #111;
+  }
   @media screen and (min-width: 576px) {
     padding: 16px 32px;
   }
@@ -22,3 +26,4 @@ header {
     padding: 20px 62px;
   }
 }
+
