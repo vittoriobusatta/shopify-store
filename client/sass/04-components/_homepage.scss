@@ -1,9 +1,8 @@
-
 ul {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   justify-items: center;
-  gap: 44px;
+  grid-gap: 26px;
   padding: 0 26px;
   @media screen and (min-width: 418px) {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -25,10 +24,28 @@ ul {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: fit-content;
+    width: 100%;
+    // min-height: 60vw;
   }
   & img {
     width: 100%;
     height: auto;
+  }
+}
+
+.landing__title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: $sirenia;
+  padding-bottom: 44px;
+  & span:first-child {
+    font-size: 12px;
+    font-family: "manrope", sans-serif;
+    color: #6F3E16;
+  }
+  & span:last-child {
+    font-size: 36px;
   }
 }
