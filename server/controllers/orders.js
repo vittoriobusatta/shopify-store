@@ -67,7 +67,6 @@ async function createShopifyOrder(order) {
 
 async function handler(req, res) {
   const { data } = req.body;
-  console.log("data", data);
   res.status(200).json({ data });
 }
 

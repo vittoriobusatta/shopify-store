@@ -1,14 +1,14 @@
-import ProductPageContent from "@/components/ProductPageContent";
+import ProductPageContent from "@/components/Products/ProductPageContent";
 import { getAllProducts, getSingleProduct } from "libs/shopify/storefront";
 import React from "react";
 
-export default function ProductPage({ product }) {
-    return (
-      <>
-        <ProductPageContent product={product} />
-      </>
-    );
-  }
+export default function ProductPage({ product, allProducts }) {
+  return (
+    <>
+      <ProductPageContent product={product} allProducts={allProducts}/>
+    </>
+  );
+}
 
 export async function getStaticPaths() {
   const paths = (await getAllProducts()).map((product) => ({
@@ -18,5 +18,11 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  return { props: { product: await getSingleProduct(params.handle) } };
+  const allProducts = await getAllProducts();
+  return {
+    props: {
+      product: await getSingleProduct(params.handle),
+      allProducts,
+    },
+  };
 }

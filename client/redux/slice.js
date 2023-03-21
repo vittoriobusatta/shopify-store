@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { delFromCart } from "libs/shopify/admin";
-import { addToCart, createCart } from "libs/shopify/storefront";
+import { addToCart, createCart, delFromCart, updateCart } from "libs/shopify/storefront";
 
 export const CREATE_CART = createAsyncThunk(
   "cart/CREATE_CART",
@@ -34,10 +33,7 @@ export const DEL_FROM_CART = createAsyncThunk(
   "cart/DEL_FROM_CART",
   async (item, { rejectWithValue }) => {
     try {
-      const cartDeleted = await delFromCart(
-        item.cartId,
-        item.id,
-      )
+      const cartDeleted = await delFromCart(item.cartId, item.id);
       return { item, cartDeleted };
     } catch (err) {
       return rejectWithValue(err.message);
@@ -45,6 +41,17 @@ export const DEL_FROM_CART = createAsyncThunk(
   }
 );
 
+export const UPDATE_CART = createAsyncThunk(
+  "cart/UPDATE_CART",
+  async (item, { rejectWithValue }) => {
+    try {
+      const cartUpdated = await delFromCart(item.cartId, item.id, item.variantQuantity);
+      return { item, cartUpdated };
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: "cart",
@@ -82,7 +89,6 @@ const cartSlice = createSlice({
       state.id = cartCreated.id;
       state.quantity = cartCreated.totalQuantity;
       state.chargeAmount = cartCreated.cost.checkoutChargeAmount.amount;
-      console.log("CREATE", cartCreated);
     });
     builder.addCase(CREATE_CART.rejected, (state, action) => {
       state.error = action.error.message;
@@ -105,7 +111,6 @@ const cartSlice = createSlice({
 
       state.quantity = cartUpdated.totalQuantity;
       state.chargeAmount = cartUpdated.cost.checkoutChargeAmount.amount;
-      console.log("UPDATE", cartUpdated);
     });
     builder.addCase(ADD_TO_CART.rejected, (state, action) => {
       state.error = action.error.message;
@@ -128,9 +133,10 @@ const cartSlice = createSlice({
 
       state.quantity = cartDeleted.totalQuantity;
       state.chargeAmount = cartDeleted.cost.checkoutChargeAmount.amount;
-      console.log("DELETE", cartDeleted);
-    }
-    );
+    });
+    builder.addCase(DEL_FROM_CART.rejected, (state, action) => {
+      state.error = action.error.message;
+    });
   },
 });
 
