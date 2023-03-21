@@ -1,8 +1,7 @@
 import React from "react";
-import ProductList from "@/components/ProductList";
+import ProductList from "@/components/Products/ProductList";
 import Head from "next/head";
 import { getAllProducts } from "libs/shopify/storefront";
-
 
 export async function getServerSideProps() {
   const products = await getAllProducts();
@@ -12,16 +11,6 @@ export async function getServerSideProps() {
     },
   };
 }
-
-// export async function getStaticProps() {
-//   const response = await axios.get("http://localhost:667/products");
-//   const products = response.data.products;
-//   return {
-//     props: {
-//       products,
-//     },
-//   };
-// }
 
 export default function Home({ products }) {
   return (
@@ -39,26 +28,6 @@ export default function Home({ products }) {
         <meta property="og:url" content="https://www.example.com" />
       </Head>
       <ProductList products={products} />
-      {/* <ul>
-        {products.map((product) => (
-          <li key={product.id}>
-            <h2>{product.title}</h2>
-            <p>{product.description}</p>
-            <Link
-              href={`/products/${product.handle}`}
-              as={`/products/${product.handle}`}
-            >
-              <Image
-                src={product.images[0].src}
-                alt={product.images[0].alt}
-                width={300}
-                height={300}
-                priority
-              />
-            </Link>
-          </li>
-        ))}
-      </ul> */}
     </>
   );
 }

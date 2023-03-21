@@ -99,6 +99,7 @@ export async function getSingleProduct(handle) {
             node {
               id
               title
+              quantityAvailable
               availableForSale
               price {
                 amount
@@ -195,16 +196,8 @@ export async function createCart(id, quantity) {
 
 export async function addToCart(cartId, merchandiseId, quantity) {
   const query = `
-    mutation {
-      cartLinesAdd(
-        cartId: "${cartId}",
-          lines: [
-            {
-              quantity: ${quantity}
-              merchandiseId: "${merchandiseId}"
-            }
-          ]
-      ) {
+    mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+      cartLinesAdd(cartId: $cartId, lines: $lines) {
         cart {
           id
           totalQuantity
@@ -238,15 +231,30 @@ export async function addToCart(cartId, merchandiseId, quantity) {
             }
           }
         }
+        userErrors {
+          field
+          message
+        }
       }
     }
-    `;
+  `;
+
+  const variables = {
+    cartId,
+    lines: [
+      {
+        quantity,
+        merchandiseId,
+      },
+    ],
+  };
 
   try {
     const response = await storeClient.mutate({
       mutation: gql`
         ${query}
       `,
+      variables,
     });
 
     return response.data.cartLinesAdd.cart;
@@ -257,38 +265,34 @@ export async function addToCart(cartId, merchandiseId, quantity) {
 }
 
 export async function delFromCart(cartId, lineId) {
-  const query = `
-    mutation {
-      cartLinesRemove(
-        cartId: "${cartId}",
-        lineIds: ["${lineId}"]
-      ) {
-        cart {
-          id
-          totalQuantity
-          cost {
-            checkoutChargeAmount {
-              amount
-            }
+  const mutation = `
+  mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+    cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+      cart {
+        id
+        totalQuantity
+        cost {
+          checkoutChargeAmount {
+            amount
           }
-          lines(first: 10) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    title
-                    quantityAvailable
-                    availableForSale
-                    price {
-                      amount
-                    }
-                    image {
-                      url
-                      altText
-                    }
+        }
+        lines(first: 10) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  quantityAvailable
+                  availableForSale
+                  price {
+                    amount
+                  }
+                  image {
+                    url
+                    altText
                   }
                 }
               }
@@ -296,14 +300,25 @@ export async function delFromCart(cartId, lineId) {
           }
         }
       }
+      userErrors {
+        field
+        message
+      }
     }
-    `;
+  }
+  `;
+
+  const variables = {
+    cartId,
+    lineIds: [lineId],
+  };
 
   try {
     const response = await storeClient.mutate({
       mutation: gql`
-        ${query}
+        ${mutation}
       `,
+      variables,
     });
 
     return response.data.cartLinesRemove.cart;
@@ -361,59 +376,38 @@ export async function getCart(cartId) {
   }
 }
 
-export async function updateCart(cartId, lineId, quantity) {
-  const mutation = `
-    mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineInput!]!) {
-      cartLinesUpdate(cartId: $cartId, lines: $lines) {
-        cart {
-          id
-          totalQuantity
-          lines(first: 10) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    quantityAvailable
-                    availableForSale
-                    price {
-                      amount
-                    }
-                    image {
-                      url
-                      altText
-                    }
-                  }
-                }
-              }
-            }
+export async function productRecommendations(productId) {
+  const query = `
+  query productRecommendations($productId: ID!) {
+    productRecommendations(productId: $productId) {
+      id
+      handle
+      title
+      productType
+      images(first: 5) {
+        edges {
+          node {
+            url
+            altText
           }
         }
       }
     }
+  }
   `;
-  
   const variables = {
-    cartId,
-    lines: [
-      {
-        id: lineId,
-        quantity,
-      },
-    ],
+    productId,
   };
 
   try {
-    const response = await storeClient.mutate({
-      mutation: gql`
-        ${mutation}
+    const response = await storeClient.query({
+      query: gql`
+        ${query}
       `,
       variables,
     });
 
-    return response.data.cartLinesUpdate.cart;
+    return response.data.productRecommendations;
   } catch (err) {
     console.error(err);
     return [];
