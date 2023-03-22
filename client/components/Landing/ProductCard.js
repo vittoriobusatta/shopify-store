@@ -10,8 +10,8 @@ function ProductCard({ product }) {
   const [Loading, setLoading] = useState(true);
 
   return (
-    <li className="landing__product">
-      <Link className="landing__product__picture" href={`/products/${handle}`}>
+    <li className="landing__item">
+      <Link className="landing__item__picture" href={`/products/${handle}`}>
         <div className="placeholder" />
         <Image
           width={286}
@@ -20,17 +20,17 @@ function ProductCard({ product }) {
           alt={altText}
           priority
           onLoadingComplete={() => setLoading(false)}
-          className={`landing__product__picture__img ${
-            !Loading ? "landing__product__picture__img--visible" : ""
+          className={`landing__item__picture__img ${
+            !Loading ? "landing__item__picture__img--visible placeholder__image" : ""
           }`}
         />
       </Link>
 
-      <div className="landing__product__details">
-        <div className="landing__product__details__name">
+      <div className="landing__item__details">
+        <div className="landing__item__details__name">
           <h3>{title}</h3>
         </div>
-        <div className="landing__product__details__price">
+        <div className="landing__item__details__price">
           <p>{formatPrice(amount)}</p>
         </div>
       </div>

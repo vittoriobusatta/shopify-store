@@ -7,17 +7,7 @@ import { CREATE_CART, ADD_TO_CART } from "redux/slice";
 import { formatPrice } from "utils/helpers";
 import { CloseIcon, SuccessIcon } from "../Vector";
 
-const ProductQuantity = ({ quantityAvailable }) => {
-  if (quantityAvailable <= 5) {
-    return (
-      <span className="product_quantity orange_warn">
-        Plus que quelques exemplaires disponibles.
-      </span>
-    );
-  }
-};
-
-function ProductForm({ product }) {
+function ProductDetails({ product }) {
   const dispatch = useDispatch();
   const [cartResponse, setCartResponse] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
@@ -106,15 +96,39 @@ function ProductForm({ product }) {
 
   return (
     <>
+      <div className="product__details">
+        <h1>{product.title}</h1>
+        <h2>{product.productType}</h2>
+        <div>
+          <h2 className="product__details__price">
+            {formatPrice(product.priceRange.minVariantPrice.amount)}
+          </h2>
+          {product.compareAtPriceRange.minVariantPrice.amount > 0 && (
+            <p className="product__details__price--old">
+              {formatPrice(product.compareAtPriceRange.minVariantPrice.amount)}
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="product__details__button">
+        <button
+          type="button"
+          onClick={handleCreateCart}
+          disabled={isProcessing}
+        >
+          Ajouter au panier
+        </button>
+      </div>
+
       {showPopup && (
-        <div className="popup">
-          <div className="popup__head">
-            <span className="popup__head__success">
+        <div className="product__popup">
+          <div className="product__popup__head">
+            <span className="product__popup__head__success">
               <SuccessIcon />
               <h3>Ajouté au panier !</h3>
             </span>
             <a
-              className="popup__close"
+              className="product__popup__close"
               onClick={() => {
                 setShowPopup(false);
               }}
@@ -122,30 +136,31 @@ function ProductForm({ product }) {
               <CloseIcon />
             </a>
           </div>
-          <div className="popup__product">
+          <div className="product__popup__item">
             <Link href={`/products/${cartResponse.item.handle}`}>
+              <div className="placeholder" />
               <Image
                 key={cartResponse.item.id}
                 src={cartResponse.item.image.src}
                 alt={cartResponse.item.image.alt}
-                width={55}
-                height={55}
-                className="popup__product__image"
+                width={62}
+                height={62}
+                className="product__popup__item__image placeholder__image"
               />
             </Link>
-            <div className="popup__product__info">
+            <div className="product__popup__item__info">
               <h1>{cartResponse.item.title}</h1>
               <h2>{cartResponse.item.productType}</h2>
               <h3>{formatPrice(cartResponse.item.price)}</h3>
             </div>
           </div>
 
-          <div className="popup__button">
-            <Link className="popup__button__cart" href="/cart">
+          <div className="product__popup__button">
+            <Link className="product__popup__button__cart" href="/cart">
               Voir le panier ({cart.quantity})
             </Link>
             <button
-              className="popup__button__checkout"
+              className="product__popup__button__checkout"
               onClick={() => {
                 handleCheckout();
               }}
@@ -155,49 +170,8 @@ function ProductForm({ product }) {
           </div>
         </div>
       )}
-      <div className="product__form">
-        <h1>{product.title}</h1>
-        <p>{formatPrice(product.priceRange.minVariantPrice.amount)}</p>
-        {product.compareAtPriceRange.minVariantPrice.amount > 0 && (
-          <p className="product__price--old">
-            {formatPrice(product.compareAtPriceRange.minVariantPrice.amount)}
-          </p>
-        )}
-        <ProductQuantity quantityAvailable={variant.quantityAvailable} />
-        {/* <div className="product__quantity">
-          <button
-            onClick={() => {
-              if (productQuantity > 1) {
-                setProductQuantity(productQuantity - 1);
-              }
-            }}
-          >
-            -
-          </button>
-          <p>{productQuantity}</p>
-          <button
-            onClick={() => {
-              if (productQuantity < variant.quantityAvailable) {
-                setProductQuantity(productQuantity + 1);
-              }
-            }}
-          >
-            +
-          </button>
-        </div> */}
-      </div>
-      <div className="product__button">
-        <button
-          className="product__button__addcart"
-          type="button"
-          onClick={handleCreateCart}
-          disabled={isProcessing}
-        >
-          Ajouter au panier
-        </button>
-      </div>
     </>
   );
 }
 
-export default ProductForm;
+export default ProductDetails;

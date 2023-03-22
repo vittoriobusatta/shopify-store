@@ -1,5 +1,5 @@
 import Image from "next/image";
-import ProductForm from "./ProductForm";
+import ProductDetails from "./ProductDetails";
 import { useState } from "react";
 import RecommendedList from "./RecommendedList";
 
@@ -13,14 +13,13 @@ export default function ProductPageContent({ product, allProducts }) {
 
   return (
     <section
-      className="page__product"
+      className="product"
       style={{
         "--color": product.color.value,
       }}
     >
-      {/* <h1 className="product__title">{product.title}</h1> */}
-      <div className="product_container">
-        <div className="products__image__placeholder" />
+      <div className="product__container">
+        <div className="placeholder" />
         {images.map((image) => (
           <Image
             key={product.id}
@@ -29,15 +28,15 @@ export default function ProductPageContent({ product, allProducts }) {
             width={286}
             height={429}
             onLoadingComplete={() => setLoading(false)}
-            className={`product__image__img ${
-              !Loading ? "product__image__img--visible" : ""
+            className={`product__container__image ${
+              !Loading ? "product__container__image--visible placeholder__image" : ""
             }
             `}
           />
         ))}
       </div>
 
-      <ProductForm product={product} />
+      <ProductDetails product={product} />
 
       <RecommendedList current={product} allProducts={allProducts}/>
     </section>
