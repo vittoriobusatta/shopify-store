@@ -27,23 +27,22 @@ function RecommendedList({ current, allProducts }) {
   return (
     <div className="recommended">
       <h2>Vous aimerez peut-être aussi</h2>
-      <div className="products__list">
+      <ul className="recommended__list">
         {products.map((product) => {
           const { url, altText } = product.images.edges[0].node;
           const { handle } = product;
 
           return (
-            <Link href={`/products/${handle}`} key={product.id}>
-              <Image
-                width={80}
-                height={80}
-                src={url}
-                alt={altText}
-              />
-            </Link>
+            <li key={
+              product.id
+            }>
+              <Link href={`/products/${handle}`} key={product.id}>
+                <Image width={200} height={200} src={url} alt={altText} />
+              </Link>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </div>
   );
 }
