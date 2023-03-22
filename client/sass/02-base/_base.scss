@@ -1,9 +1,9 @@
 ::-moz-selection {
-  background: var(--primary_color);
+  background-color: #1e8f27;
   text-shadow: none;
 }
 ::selection {
-  background: var(--primary_color);
+  background-color: #1e8f27;
   text-shadow: none;
 }
 
@@ -49,6 +49,29 @@ html {
   }
 }
 
+main {
+  padding-top: 68px;
+}
+
+.placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: #f0ece3;
+  &__image {
+    position: relative;
+    z-index: 2;
+  }
+}
+
 .orange_warn {
   color: orange;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
