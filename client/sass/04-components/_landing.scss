@@ -48,7 +48,7 @@
       font-size: 36px;
     }
   }
-  &__product {
+  &__item {
     &__picture {
       display: block;
       position: relative;
@@ -59,7 +59,11 @@
       &__img {
         position: relative;
         z-index: 2;
-        transition: transform 1s ease, opacity 0.5s ease;
+        // clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        // transition: clip-path 0.8s ease, opacity 0.5s ease;
+        // &--visible {
+        //   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        // }
       }
     }
     &__details {

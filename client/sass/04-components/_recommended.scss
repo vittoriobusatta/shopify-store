@@ -1,3 +1,25 @@
 .recommended {
-    margin-top: 88px;
+  margin-top: 88px;
+  padding: 0 26px;
+  & h2 {
+    font-family: "manrope", sans-serif;
+    margin-bottom: 4px;
+    font-size: 20px;
+  }
+  &__list {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    row-gap: 26px;
+    overflow: hidden;
+    & li {
+      flex: 0 0 calc(90% - 20px);
+      background: #f0ece3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-right: 20px;
+    }
+  }
 }

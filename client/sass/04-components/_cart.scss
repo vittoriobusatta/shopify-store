@@ -19,24 +19,12 @@
   }
 }
 
-// button {
-//   background-color: #112926;
-//   color: #ffffff;
-//   font-size: 12px;
-//   font-weight: 400;
-//   border: none;
-//   cursor: pointer;
-//   transition: all 0.3s ease;
-//   padding: 12px 40px 12px 40px;
-//   border-radius: 3px;
-//   text-transform: uppercase;
-// }
 .pre {
-  padding: 8px;
   cursor: pointer;
   display: inline-flex;
   position: relative;
   align-items: center;
+  margin-left: 8px;
   &__jewel {
     display: block;
     position: absolute;
@@ -49,6 +37,7 @@
     font-family: $sirenia;
   }
 }
+
 
 .cart_list {
   display: flex;

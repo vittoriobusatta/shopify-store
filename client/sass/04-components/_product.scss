@@ -1,0 +1,145 @@
+.product {
+  min-height: 100vh;
+  width: 100%;
+  padding-bottom: 62px;
+  &__container {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    &__image {
+      transform: scale(1.1);
+      transition: transform 0.8s ease, opacity 0.5s ease;
+      opacity: 0;
+      &--visible {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  }
+  &__details {
+    padding: 26px;
+    & h1 {
+      font-size: 32px;
+      font-family: $sirenia;
+    }
+    & h2 {
+      font-size: 16px;
+      font-family: "Manrope", sans-serif;
+      color: #222;
+    }
+    &__price {
+      &--old {
+        text-decoration: line-through;
+      }
+    }
+    &__button {
+      display: flex;
+      flex-direction: column;
+      padding: 0 26px;
+      & button {
+        background-color: #112926;
+        color: #f0ece3;
+        font-size: 12px;
+        font-weight: 400;
+        cursor: pointer;
+        padding: 18px 24px;
+        border-radius: 25px;
+        text-transform: uppercase;
+        width: 100%;
+      }
+    }
+  }
+  &__popup {
+    position: fixed;
+    top: 0%;
+    right: 0%;
+    background-color: $background_color;
+    padding: 20px;
+    z-index: 9999;
+    width: 100%;
+    color: #222;
+    max-width: 500px;
+    &__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: row;
+      &__success {
+        display: inline-flex;
+        align-items: center;
+        column-gap: 8px;
+      }
+      & h3,
+      a {
+        font-size: 14px;
+        font-family: "Manrope", sans-serif;
+      }
+      & a {
+        cursor: pointer;
+      }
+    }
+    &__item {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: row;
+      margin-top: 26px;
+      column-gap: 16px;
+      & a {
+        position: relative;
+      }
+      &__info {
+        display: flex;
+        flex-direction: column;
+        & h1 {
+          font-size: 22px;
+          font-family: $sirenia;
+          margin-bottom: 4px;
+        }
+        & h2,
+        h3 {
+          font-size: 14px;
+          font-family: "manrope", sans-serif;
+          color: #757575;
+          margin-bottom: 4px;
+        }
+      }
+    }
+    &__button {
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      column-gap: 12px;
+      font-family: "manrope", sans-serif;
+      font-weight: $regular;
+      margin-top: 26px;
+      &__cart {
+        font-size: 12px;
+        font-weight: 400;
+        cursor: pointer;
+        padding: 18px 24px;
+        border-radius: 25px;
+        text-transform: uppercase;
+        border: solid 1px #ccc;
+        flex: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        color: #111;
+      }
+      &__checkout {
+        background-color: #112926;
+        color: #f0ece3;
+        font-size: 12px;
+        font-weight: 400;
+        cursor: pointer;
+        padding: 18px 24px;
+        border-radius: 25px;
+        text-transform: uppercase;
+        flex: 1;
+      }
+    }
+  }
+}
