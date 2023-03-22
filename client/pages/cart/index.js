@@ -38,6 +38,8 @@ function cart() {
       });
   };
 
+  console.log(cart.chargeAmount);
+
   return (
     <section className="cart">
       <div className="cart__head">
@@ -49,7 +51,11 @@ function cart() {
       </div>
 
       {cart.items.length === 0 ? (
-        <p>Votre panier est vide</p>
+        <div className="cart__content">
+          <p className="cart__content__text">
+            Il n'y a aucun article dans votre panier.
+          </p>
+        </div>
       ) : (
         <ul className="cart__list">
           {cart.items.map((products) => {
@@ -97,25 +103,31 @@ function cart() {
           })}
         </ul>
       )}
-      <div className="cart__button">
-        <button
-          onClick={() => {
-            handleEmptyCart();
-          }}
-          className="cart__button__clear"
-        >
-          Clear cart
-        </button>
-        <button
-          onClick={() => {
-            handleCheckout();
-          }}
-          disabled={disableCart}
-          className={disableCart ? "cart__button__checkout disabled" : "cart__button__checkout"}
-        >
-          Paiement
-        </button>
-      </div>
+      {cart.items.length === 0 ? null : (
+        <div className="cart__button">
+          <button
+            onClick={() => {
+              handleEmptyCart();
+            }}
+            className="cart__button__clear"
+          >
+            Clear cart
+          </button>
+          <button
+            onClick={() => {
+              handleCheckout();
+            }}
+            disabled={disableCart}
+            className={
+              disableCart
+                ? "cart__button__checkout disabled"
+                : "cart__button__checkout"
+            }
+          >
+            Paiement
+          </button>
+        </div>
+      )}
     </section>
   );
 }
