@@ -1,22 +1,17 @@
-import React, { useState } from 'react';
+import React from "react";
 
-const SearchBar = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const handleChange = (e) => {
-    setSearchTerm(e.target.value);
-    onSearch(e.target.value);
-  };
-
+const SearchBar = ({ setSearch }) => {
   return (
-    <div className="search-bar">
-      <input
-        type="text"
-        placeholder="Rechercher des produits..."
-        value={searchTerm}
-        onChange={handleChange}
-      />
-    </div>
+    <section className="search">
+      <div className="search__head">
+        <div className="search__head__input">
+          <input type="text" placeholder="Rechercher" />
+        </div>
+        <h1 className="search__head__close" onClick={() => setSearch(false)}>
+          Annuler
+        </h1>
+      </div>
+    </section>
   );
 };
 

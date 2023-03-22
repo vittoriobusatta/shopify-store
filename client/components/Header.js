@@ -1,24 +1,21 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { CartIcon, LogoIcon, SearchIcon } from "./Vector";
+import { CartIcon, SearchIcon } from "./Vector";
 import SearchBar from "@/components/Search";
 
 function Header() {
   const quantity = useSelector((state) => state.cart.quantity);
+  const [search, setSearch] = useState(false);
 
   return (
     <header>
       <Link href="/">
         <h1>HIJAB</h1>
       </Link>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-end",
-        }}
-      >
-        <SearchBar />
+      <div>
+        <SearchIcon search={search} setSearch={setSearch} />
+        {search && <SearchBar setSearch={setSearch} />}
         <Link className="pre" href="/cart">
           <CartIcon />
           <span className="pre__jewel">
