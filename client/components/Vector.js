@@ -43,7 +43,7 @@ const LogginIcon = () => {
   );
 };
 
-const SearchIcon = () => {
+const SearchIcon = ({ setSearch, search }) => {
   return (
     <svg
       width="21"
@@ -51,6 +51,8 @@ const SearchIcon = () => {
       viewBox="0 0 21 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      onClick={() => setSearch(true)}
+      style={{ cursor: "pointer" }}
     >
       <path
         d="M14.9707 15.5293L19.4413 19.9999M16.6471 9.38212C16.6471 13.7029 13.1443 17.2057 8.82353 17.2057C4.50271 17.2057 1 13.7029 1 9.38212C1 5.06131 4.50271 1.55859 8.82353 1.55859C13.1443 1.55859 16.6471 5.06131 16.6471 9.38212Z"

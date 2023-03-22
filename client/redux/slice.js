@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addToCart, createCart, delFromCart, updateCart } from "libs/shopify/storefront";
+import {
+  addToCart,
+  createCart,
+  delFromCart,
+  updateCart,
+} from "libs/shopify/storefront";
 
 export const CREATE_CART = createAsyncThunk(
   "cart/CREATE_CART",
@@ -45,7 +50,11 @@ export const UPDATE_CART = createAsyncThunk(
   "cart/UPDATE_CART",
   async (item, { rejectWithValue }) => {
     try {
-      const cartUpdated = await delFromCart(item.cartId, item.id, item.variantQuantity);
+      const cartUpdated = await delFromCart(
+        item.cartId,
+        item.id,
+        item.variantQuantity
+      );
       return { item, cartUpdated };
     } catch (err) {
       return rejectWithValue(err.message);
@@ -53,13 +62,14 @@ export const UPDATE_CART = createAsyncThunk(
   }
 );
 
-const cartSlice = createSlice({
+export const cartSlice = createSlice({
   name: "cart",
   initialState: {
     items: [],
     quantity: 0,
     chargeAmount: 0,
     id: null,
+    error: null,
   },
   reducers: {
     CLEAR_CART: (state) => {
@@ -140,6 +150,11 @@ const cartSlice = createSlice({
   },
 });
 
+
 export const { CLEAR_CART } = cartSlice.actions;
 
 export default cartSlice.reducer;
+
+
+
+

@@ -1,5 +1,5 @@
 import React from "react";
-import ProductList from "@/components/Products/ProductList";
+import ProductList from "@/components/Landing/ProductList";
 import Head from "next/head";
 import { getAllProducts } from "libs/shopify/storefront";
 
