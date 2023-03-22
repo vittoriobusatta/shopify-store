@@ -5,8 +5,8 @@ import { CLEAR_CART } from "redux/slice";
 import Spinner from "@/components/Spinner";
 import { getCart } from "libs/shopify/storefront";
 
-// const domain = process.env.NEXT_PUBLIC_SERVER_HOSTNAME;
-const domain = "http://localhost:3000";
+const domain = process.env.NEXT_PUBLIC_SERVER_HOSTNAME;
+// const domain = "http://localhost:3000";
 
 export async function getServerSideProps(context) {
   const { session_id } = context.query;

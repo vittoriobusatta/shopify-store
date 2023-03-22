@@ -1,7 +1,7 @@
 import stripeClient from "../../../libs/stripe";
 
-// const domain = process.env.NEXT_PUBLIC_CLIENT_HOSTNAME;
-const domain = "http://localhost:3000";
+const domain = process.env.NEXT_PUBLIC_CLIENT_HOSTNAME;
+// const domain = "http://localhost:3000";
 
 async function createCheckoutSession(req, res) {
   const { items, cartId } = req.body;
