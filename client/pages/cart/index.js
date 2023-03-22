@@ -1,3 +1,4 @@
+import { DeleteIcon } from "@/components/Vector";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,12 +39,8 @@ function cart() {
   };
 
   return (
-    <section>
-      <div
-        style={{
-          textAlign: "center",
-        }}
-      >
+    <section className="cart">
+      <div className="cart__head">
         <h1>Panier</h1>
         <h2>
           {cart.quantity} {cart.quantity > 1 ? "articles" : "article"} |{" "}
@@ -54,46 +51,36 @@ function cart() {
       {cart.items.length === 0 ? (
         <p>Votre panier est vide</p>
       ) : (
-        <ul className="cart_list">
+        <ul className="cart__list">
           {cart.items.map((products) => {
             const { title, handle } = products.item;
             const { image, price, quantityAvailable } =
               products.line.node.merchandise;
             const { quantity } = products.line.node;
             return (
-              <li key={products.line.node.id}>
-                <div
-                  style={{
-                    flex: 1,
-                  }}
-                >
+              <li className="cart__item" key={products.line.node.id}>
+                <div className="cart__item__picture">
                   <Link href={`/products/${handle}`}>
+                    <div className="placeholder" />
                     <Image
                       src={image.url}
                       alt={image.altText}
                       width={100}
                       height={100}
                       priority
+                      className="placeholder__image"
                     />
                   </Link>
                 </div>
-                <div
-                  style={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <div>
-                    <h3>{title}</h3>
-                  </div>
-                  <p>Quantity : {quantity}</p>
+                <div className="cart__item__info">
+                  <h3>{title}</h3>
+                  <p>Quantité : {quantity}</p>
                   <p className="orange_warn">
                     {quantityAvailable <= 5
                       ? "Plus que quelques exemplaires disponibles. Commandez vite."
                       : ""}
                   </p>
-                  <p>{formatPrice(price.amount)}</p>
+                  <p>{formatPrice(price.amount * quantity)}</p>
                   <a
                     onClick={() => {
                       handleDeleteItem({
@@ -102,22 +89,7 @@ function cart() {
                       });
                     }}
                   >
-                    <svg
-                      aria-hidden="true"
-                      focusable="false"
-                      viewBox="0 0 24 24"
-                      role="img"
-                      width="24px"
-                      height="24px"
-                      fill="none"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeMiterlimit="10"
-                        strokeWidth="1.5"
-                        d="M14.25 7.5v12m-4.5-12v12M5.25 6v13.5c0 1.24 1.01 2.25 2.25 2.25h9c1.24 0 2.25-1.01 2.25-2.25V5.25h2.75m-2.75 0H21m-12-3h5.25c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5H3"
-                      ></path>
-                    </svg>
+                    <DeleteIcon />
                   </a>
                 </div>
               </li>

@@ -43,7 +43,7 @@ const LogginIcon = () => {
   );
 };
 
-const SearchIcon = ({ setSearch, search }) => {
+const SearchIcon = ({ setSearch }) => {
   return (
     <svg
       width="21"
@@ -199,156 +199,27 @@ const CloseIcon = () => {
   );
 };
 
-{
-  /* <svg
-xmlns="http://www.w3.org/2000/svg"
-id="svg5512"
-version="1.1"
-viewBox="0 0 95.779 40.164"
-height={20}
->
-<script xmlns="" />
-<script xmlns="" />
-<g id="layer1" transform="translate(24.946 -325.034)">
-  <g id="Stripe" transform="matrix(.26458 0 0 .26458 -38.97 315.774)">
+const DeleteIcon = () => {
+  return (
+    <svg
+    aria-hidden="true"
+    focusable="false"
+    viewBox="0 0 24 24"
+    role="img"
+    width="24px"
+    height="24px"
+    fill="none"
+    style={{ cursor: "pointer" }}
+  >
     <path
-      id="path5516"
-      fill="#FFFFFF"
-      fill-rule="evenodd"
-      d="M414 113.4c0-25.6-12.4-45.8-36.1-45.8-23.8 0-38.2 20.2-38.2 45.6 0 30.1 17 45.3 41.4 45.3 11.9 0 20.9-2.7 27.7-6.5v-20c-6.8 3.4-14.6 5.5-24.5 5.5-9.7 0-18.3-3.4-19.4-15.2h48.9c0-1.3.2-6.5.2-8.9zm-49.4-9.5c0-11.3 6.9-16 13.2-16 6.1 0 12.6 4.7 12.6 16z"
-      class="st0"
-      clip-rule="evenodd"
-    />
-    <path
-      id="path5518"
-      fill="#FFFFFF"
-      fill-rule="evenodd"
-      d="M301.1 67.6c-9.8 0-16.1 4.6-19.6 7.8l-1.3-6.2h-22v116.6l25-5.3.1-28.3c3.6 2.6 8.9 6.3 17.7 6.3 17.9 0 34.2-14.4 34.2-46.1-.1-29-16.6-44.8-34.1-44.8zm-6 68.9c-5.9 0-9.4-2.1-11.8-4.7l-.1-37.1c2.6-2.9 6.2-4.9 11.9-4.9 9.1 0 15.4 10.2 15.4 23.3 0 13.4-6.2 23.4-15.4 23.4z"
-      class="st0"
-      clip-rule="evenodd"
-    />
-    <path
-      id="polygon5520"
-      fill="#FFFFFF"
-      fill-rule="evenodd"
-      d="M248.9 56.3V36l-25.1 5.3v20.4z"
-      class="st0"
-      clip-rule="evenodd"
-    />
-    <path
-      id="rect5522"
-      fill="#FFFFFF"
-      fill-rule="evenodd"
-      d="M223.8 69.3h25.1v87.5h-25.1z"
-      class="st0"
-      clip-rule="evenodd"
-    />
-    <path
-      id="path5524"
-      fill="#FFFFFF"
-      fill-rule="evenodd"
-      d="M196.9 76.7l-1.6-7.4h-21.6v87.5h25V97.5c5.9-7.7 15.9-6.3 19-5.2v-23c-3.2-1.2-14.9-3.4-20.8 7.4z"
-      class="st0"
-      clip-rule="evenodd"
-    />
-    <path
-      id="path5526"
-      fill="#FFFFFF"
-      fill-rule="evenodd"
-      d="M146.9 47.6l-24.4 5.2-.1 80.1c0 14.8 11.1 25.7 25.9 25.7 8.2 0 14.2-1.5 17.5-3.3V135c-3.2 1.3-19 5.9-19-8.9V90.6h19V69.3h-19z"
-      class="st0"
-      clip-rule="evenodd"
-    />
-    <path
-      id="path5528"
-      fill="#FFFFFF"
-      fill-rule="evenodd"
-      d="M79.3 94.7c0-3.9 3.2-5.4 8.5-5.4 7.6 0 17.2 2.3 24.8 6.4V72.2c-8.3-3.3-16.5-4.6-24.8-4.6C67.5 67.6 54 78.2 54 95.9c0 27.6 38 23.2 38 35.1 0 4.6-4 6.1-9.6 6.1-8.3 0-18.9-3.4-27.3-8v23.8c9.3 4 18.7 5.7 27.3 5.7 20.8 0 35.1-10.3 35.1-28.2-.1-29.8-38.2-24.5-38.2-35.7z"
-      class="st0"
-      clip-rule="evenodd"
-    />
-  </g>
-</g>
-</svg>
-<svg
-class="icon icon--full-color"
-viewBox="0 0 38 24"
-xmlns="http://www.w3.org/2000/svg"
-width="38"
-height="24"
-role="img"
-aria-labelledby="pi-paypal"
->
-<title id="pi-paypal">PayPal</title>
-<path
-  opacity=".07"
-  d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"
-></path>
-<path
-  fill="#fff"
-  d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"
-></path>
-<path
-  fill="#003087"
-  d="M23.9 8.3c.2-1 0-1.7-.6-2.3-.6-.7-1.7-1-3.1-1h-4.1c-.3 0-.5.2-.6.5L14 15.6c0 .2.1.4.3.4H17l.4-3.4 1.8-2.2 4.7-2.1z"
-></path>
-<path
-  fill="#3086C8"
-  d="M23.9 8.3l-.2.2c-.5 2.8-2.2 3.8-4.6 3.8H18c-.3 0-.5.2-.6.5l-.6 3.9-.2 1c0 .2.1.4.3.4H19c.3 0 .5-.2.5-.4v-.1l.4-2.4v-.1c0-.2.3-.4.5-.4h.3c2.1 0 3.7-.8 4.1-3.2.2-1 .1-1.8-.4-2.4-.1-.5-.3-.7-.5-.8z"
-></path>
-<path
-  fill="#012169"
-  d="M23.3 8.1c-.1-.1-.2-.1-.3-.1-.1 0-.2 0-.3-.1-.3-.1-.7-.1-1.1-.1h-3c-.1 0-.2 0-.2.1-.2.1-.3.2-.3.4l-.7 4.4v.1c0-.3.3-.5.6-.5h1.3c2.5 0 4.1-1 4.6-3.8v-.2c-.1-.1-.3-.2-.5-.2h-.1z"
-></path>
-</svg>
-<svg
-class="icon icon--full-color"
-viewBox="0 0 38 24"
-xmlns="http://www.w3.org/2000/svg"
-role="img"
-width="38"
-height="24"
-aria-labelledby="pi-visa"
->
-<title id="pi-visa">Visa</title>
-<path
-  opacity=".07"
-  d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"
-></path>
-<path
-  fill="#fff"
-  d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"
-></path>
-<path
-  d="M28.3 10.1H28c-.4 1-.7 1.5-1 3h1.9c-.3-1.5-.3-2.2-.6-3zm2.9 5.9h-1.7c-.1 0-.1 0-.2-.1l-.2-.9-.1-.2h-2.4c-.1 0-.2 0-.2.2l-.3.9c0 .1-.1.1-.1.1h-2.1l.2-.5L27 8.7c0-.5.3-.7.8-.7h1.5c.1 0 .2 0 .2.2l1.4 6.5c.1.4.2.7.2 1.1.1.1.1.1.1.2zm-13.4-.3l.4-1.8c.1 0 .2.1.2.1.7.3 1.4.5 2.1.4.2 0 .5-.1.7-.2.5-.2.5-.7.1-1.1-.2-.2-.5-.3-.8-.5-.4-.2-.8-.4-1.1-.7-1.2-1-.8-2.4-.1-3.1.6-.4.9-.8 1.7-.8 1.2 0 2.5 0 3.1.2h.1c-.1.6-.2 1.1-.4 1.7-.5-.2-1-.4-1.5-.4-.3 0-.6 0-.9.1-.2 0-.3.1-.4.2-.2.2-.2.5 0 .7l.5.4c.4.2.8.4 1.1.6.5.3 1 .8 1.1 1.4.2.9-.1 1.7-.9 2.3-.5.4-.7.6-1.4.6-1.4 0-2.5.1-3.4-.2-.1.2-.1.2-.2.1zm-3.5.3c.1-.7.1-.7.2-1 .5-2.2 1-4.5 1.4-6.7.1-.2.1-.3.3-.3H18c-.2 1.2-.4 2.1-.7 3.2-.3 1.5-.6 3-1 4.5 0 .2-.1.2-.3.2M5 8.2c0-.1.2-.2.3-.2h3.4c.5 0 .9.3 1 .8l.9 4.4c0 .1 0 .1.1.2 0-.1.1-.1.1-.1l2.1-5.1c-.1-.1 0-.2.1-.2h2.1c0 .1 0 .1-.1.2l-3.1 7.3c-.1.2-.1.3-.2.4-.1.1-.3 0-.5 0H9.7c-.1 0-.2 0-.2-.2L7.9 9.5c-.2-.2-.5-.5-.9-.6-.6-.3-1.7-.5-1.9-.5L5 8.2z"
-  fill="#142688"
-></path>
-</svg>
-<svg
-className="icon icon--full-color"
-viewBox="0 0 38 24"
-xmlns="http://www.w3.org/2000/svg"
-role="img"
-width="38"
-height="24"
-aria-labelledby="pi-master"
->
-<title id="pi-master">Mastercard</title>
-<path
-  opacity=".07"
-  d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"
-></path>
-<path
-  fill="#fff"
-  d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"
-></path>
-<circle fill="#EB001B" cx="15" cy="12" r="7"></circle>
-<circle fill="#F79E1B" cx="23" cy="12" r="7"></circle>
-<path
-  fill="#FF5F00"
-  d="M22 12c0-2.4-1.2-4.5-3-5.7-1.8 1.3-3 3.4-3 5.7s1.2 4.5 3 5.7c1.8-1.2 3-3.3 3-5.7z"
-></path>
-</svg> */
-}
+      stroke="currentColor"
+      strokeMiterlimit="10"
+      strokeWidth="1.5"
+      d="M14.25 7.5v12m-4.5-12v12M5.25 6v13.5c0 1.24 1.01 2.25 2.25 2.25h9c1.24 0 2.25-1.01 2.25-2.25V5.25h2.75m-2.75 0H21m-12-3h5.25c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5H3"
+    ></path>
+  </svg>
+  );
+};
 
-export { CartIcon, LogginIcon, SearchIcon, LogoIcon, SuccessIcon, CloseIcon };
+
+export { CartIcon, LogginIcon, SearchIcon, LogoIcon, SuccessIcon, CloseIcon, DeleteIcon };
