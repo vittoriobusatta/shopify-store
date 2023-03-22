@@ -97,11 +97,12 @@ function cart() {
           })}
         </ul>
       )}
-      <div>
+      <div className="cart__button">
         <button
           onClick={() => {
             handleEmptyCart();
           }}
+          className="cart__button__clear"
         >
           Clear cart
         </button>
@@ -110,7 +111,7 @@ function cart() {
             handleCheckout();
           }}
           disabled={disableCart}
-          className={disableCart ? "disabled" : ""}
+          className={disableCart ? "cart__button__checkout disabled" : "cart__button__checkout"}
         >
           Paiement
         </button>

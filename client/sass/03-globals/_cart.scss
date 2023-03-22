@@ -60,6 +60,35 @@
       }
     }
   }
+  &__button {
+    display: inline-flex;
+    &__clear {
+      font-size: 12px;
+      font-weight: 400;
+      cursor: pointer;
+      padding: 18px 24px;
+      border-radius: 25px;
+      text-transform: uppercase;
+      border: solid 1px #ccc;
+      flex: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: #111;
+    }
+    &__checkout {
+      background-color: #112926;
+      color: #f0ece3;
+      font-size: 12px;
+      font-weight: 400;
+      cursor: pointer;
+      padding: 18px 24px;
+      border-radius: 25px;
+      text-transform: uppercase;
+      flex: 1;
+    }
+  }
 }
 
 .pre {
