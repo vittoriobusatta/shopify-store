@@ -2,7 +2,7 @@ import { DeleteIcon } from "@/components/Vector";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CLEAR_CART, DEL_FROM_CART } from "redux/slice";
 import { formatPrice } from "utils/helpers";
@@ -10,6 +10,7 @@ import { formatPrice } from "utils/helpers";
 function cart() {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const disableCart = cart.items.length === 0;
 
@@ -25,20 +26,24 @@ function cart() {
     const url = `/api/checkout/create`;
 
     if (disableCart) return;
-    axios
-      .post(url, {
-        items: cart.items,
-        cartId: cart.id,
-      })
-      .then((res) => {
-        window.location.href = res.data.url;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      axios
+        .post(url, {
+          items: cart.items,
+          cartId: cart.id,
+        })
+        .then((res) => {
+          window.location.href = res.data.url;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setCheckoutLoading(false);
+    }
   };
-
-  console.log(cart.chargeAmount);
 
   return (
     <section className="cart">
@@ -117,14 +122,14 @@ function cart() {
             onClick={() => {
               handleCheckout();
             }}
-            disabled={disableCart}
+            disabled={checkoutLoading}
             className={
               disableCart
                 ? "cart__button__checkout disabled"
                 : "cart__button__checkout"
             }
           >
-            Paiement
+            {checkoutLoading ? "Loading..." : "Checkout"}
           </button>
         </div>
       )}

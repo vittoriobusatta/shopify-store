@@ -14,6 +14,8 @@ function ProductDetails({ product }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const popupTimeout = useRef(null);
 
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
   const cart = useSelector((state) => state.cart);
 
   const variants = [];
@@ -80,20 +82,20 @@ function ProductDetails({ product }) {
   }, [cartResponse]);
 
   const handleCheckout = async () => {
+    setCheckoutLoading(true);
     const url = `/api/checkout/create`;
-    axios
-      .post(url, {
+    try {
+      const res = await axios.post(url, {
         items: cart.items,
         cartId: cart.id,
-      })
-      .then((res) => {
-        window.location.href = res.data.url;
-      })
-      .catch((err) => {
-        console.log(err);
       });
+      window.location.href = res.data.url;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setCheckoutLoading(false);
+    }
   };
-
   return (
     <>
       <div className="product__details">
@@ -164,8 +166,9 @@ function ProductDetails({ product }) {
               onClick={() => {
                 handleCheckout();
               }}
+              disabled={checkoutLoading}
             >
-              Paiement
+              {checkoutLoading ? "Loading..." : "Paiement"}
             </button>
           </div>
         </div>
