@@ -2,7 +2,7 @@ import { DeleteIcon } from "@/components/Vector";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CLEAR_CART, DEL_FROM_CART } from "redux/slice";
 import { formatPrice } from "utils/helpers";
@@ -10,6 +10,7 @@ import { formatPrice } from "utils/helpers";
 function cart() {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const disableCart = cart.items.length === 0;
 
@@ -25,17 +26,23 @@ function cart() {
     const url = `/api/checkout/create`;
 
     if (disableCart) return;
-    axios
-      .post(url, {
-        items: cart.items,
-        cartId: cart.id,
-      })
-      .then((res) => {
-        window.location.href = res.data.url;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      axios
+        .post(url, {
+          items: cart.items,
+          cartId: cart.id,
+        })
+        .then((res) => {
+          window.location.href = res.data.url;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setCheckoutLoading(false);
+    }
   };
 
   return (
@@ -49,7 +56,11 @@ function cart() {
       </div>
 
       {cart.items.length === 0 ? (
-        <p>Votre panier est vide</p>
+        <div className="cart__content">
+          <p className="cart__content__text">
+            Il n'y a aucun article dans votre panier.
+          </p>
+        </div>
       ) : (
         <ul className="cart__list">
           {cart.items.map((products) => {
@@ -97,25 +108,31 @@ function cart() {
           })}
         </ul>
       )}
-      <div className="cart__button">
-        <button
-          onClick={() => {
-            handleEmptyCart();
-          }}
-          className="cart__button__clear"
-        >
-          Clear cart
-        </button>
-        <button
-          onClick={() => {
-            handleCheckout();
-          }}
-          disabled={disableCart}
-          className={disableCart ? "cart__button__checkout disabled" : "cart__button__checkout"}
-        >
-          Paiement
-        </button>
-      </div>
+      {cart.items.length === 0 ? null : (
+        <div className="cart__button">
+          <button
+            onClick={() => {
+              handleEmptyCart();
+            }}
+            className="cart__button__clear"
+          >
+            Clear cart
+          </button>
+          <button
+            onClick={() => {
+              handleCheckout();
+            }}
+            disabled={checkoutLoading}
+            className={
+              disableCart
+                ? "cart__button__checkout disabled"
+                : "cart__button__checkout"
+            }
+          >
+            {checkoutLoading ? "Loading..." : "Checkout"}
+          </button>
+        </div>
+      )}
     </section>
   );
 }

@@ -89,6 +89,17 @@
       flex: 1;
     }
   }
+  &__content {
+    display: flex;
+    padding: 44px 26px;
+    & p {
+      width: 100%;
+      padding-top: 26px;
+      border-top: solid 1px #d2d2d2;
+      font-size: 16px;
+      font-family: "manrope", sans-serif;
+    }
+  }
 }
 
 .pre {
